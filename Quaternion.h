@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _QUATERNION_H
+#define _QUATERNION_H
+
 #include <float.h>
 #include "Vector3f.h"
 #include <string>
@@ -43,7 +45,7 @@ public:
 	}
 
 	//Destructor---------------------------------------------------------------------------------------
-	~Quaternion() {};
+	~Quaternion() = default;
 
 	//Member Functions --------------------------------------------------------------------------------
 	float GetSqrMagnitude() const
@@ -230,6 +232,31 @@ public:
 		return result;
 	}
 
+	//Normally interpolates between a and b
+	Quaternion static Nlerp(Quaternion a, Quaternion b, float alpha)
+	{
+		Quaternion result = Quaternion();
+
+		float dot = Dot(a, b);
+
+		float oneMinusAlpha = 1.0f - alpha;
+
+		if (dot < 0) {
+			result.r = oneMinusAlpha * a.r + alpha * -b.r;
+			result.i = oneMinusAlpha * a.i + alpha * -b.i;
+			result.j = oneMinusAlpha * a.j + alpha * -b.j;
+			result.k = oneMinusAlpha * a.k + alpha * -b.k;
+		}
+		else {
+			result.r = oneMinusAlpha * a.r + alpha * b.r;
+			result.i = oneMinusAlpha * a.i + alpha * b.i;
+			result.j = oneMinusAlpha * a.j + alpha * b.j;
+			result.k = oneMinusAlpha * a.k + alpha * b.k;
+		}
+		result.Normalize();
+		return result;
+	}
+
 	//Operators---------------------------------------------------------------------------------
 	Quaternion operator = (const Quaternion& q)
 	{
@@ -289,3 +316,5 @@ public:
 		return RotateVectorByQuaternion(V);
 	}
 };
+
+#endif // !_QUATERNION_H

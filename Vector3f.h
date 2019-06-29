@@ -160,10 +160,7 @@ public:
 
 	bool operator==(const Vector3f & other)
 	{
-		if (x == other.x && y == other.y && z == other.z)
-			return true;
-		else
-			return false;
+		return (x == other.x && y == other.y && z == other.z);
 	}
 
 	bool operator!=(const Vector3f & other)
