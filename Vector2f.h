@@ -94,6 +94,9 @@ public:
 		return v1.x*v2.x + v1.y*v2.y;
 	}
 
+	// 2D vector cross product analog.
+	// The cross product of 2D vectors results in a 3D vector with only a z component.
+	// This function returns the magnitude of the z value.
 	static float Cross(Vector2f v1, Vector2f v2)
 	{
 		return v1.x * v2.y - v1.y * v2.x;
