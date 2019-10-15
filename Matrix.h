@@ -52,4 +52,9 @@ public:
 	float operator()(size_t row, size_t column);
 };
 
+inline std::ostream& operator<<(std::ostream& os, Matrix4x4& m)
+{
+	return os << m.to_string();
+}
+
 #endif // !_MATRIX_H

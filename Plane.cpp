@@ -13,7 +13,7 @@ Plane::Plane(const Plane & p) :a(p.a), b(p.b), c(p.c), d(p.d) {}
 
 Plane::Plane(float a, float b, float c, float d) : a(a), b(b), c(c), d(d) {}
 
-Plane::Plane(const Vector3D & normal, float distance)
+Plane::Plane(const Vector3f & normal, float distance)
 {
 	a = normal.x;
 	b = normal.y;

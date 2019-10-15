@@ -20,7 +20,7 @@ public:
 
 	Vector2f(float x, float y) :x(x), y(y) {}
 
-	Vector2f(Vector3D vector3d) :x(vector3d.x), y(vector3d.y) {}
+	Vector2f(Vector3f vector3d) :x(vector3d.x), y(vector3d.y) {}
 
 	//Destructor---------------------------------------------------------------------------------------
 	~Vector2f() = default;
@@ -54,6 +54,16 @@ public:
 		y = normalized.y;
 	}
 
+	//clamp v to given length
+	void Clamp(const float length)
+	{
+		if (SqrMagnitude() > length*length)
+		{
+			Normalize();
+			*this = *this * length;
+		}
+	}
+
 	//Returns Perpendicular either clockwise or anti-clockwise
 	Vector2f const Perpendicular(bool clockwise)
 	{
@@ -64,14 +74,19 @@ public:
 	}
 
 	//converts vector to a formatted string
-	std::string to_string()
+	std::string to_string() const
 	{
 		return "x: " + std::to_string(x) + " y: " + std::to_string(y);
 	}
 
-	Vector3D to_Vector3D()
+	Vector3f to_Vector3D()
 	{
-		return Vector3D(x, y, 0);
+		return Vector3f(x, y, 0);
+	}
+
+	bool IsValid() const
+	{
+		return (!_isnan(x) && !_isnan(y));
 	}
 
 	//Static-----------------------------------------------------------------------------------------
@@ -86,6 +101,12 @@ public:
 	static float Distance(Vector2f v1, Vector2f v2)
 	{
 		return (v1 - v2).Magnitude();
+	}
+
+	//square distance between v1 and v2
+	static float SqrDistance(Vector2f v1, Vector2f v2)
+	{
+		return (v1 - v2).SqrMagnitude();
 	}
 
 	//returns the sum of the products of v1 and v2
@@ -108,6 +129,15 @@ public:
 		return (v1 * alpha) + (v2 * (1 - alpha));
 	}
 
+	//spherically interpolate between v1 and v2
+	//static Vector2f Slerp(Vector2f v1, Vector2f v2, float alpha)
+	//{
+	//	float theta = Angle(v1, v2);
+	//	return Rotated()
+	//	float dot = Dot(v1, v2);
+	//	float omega = acos(Clamp(dot, -1)
+	//}
+
 	//returns a vector that is the reflection v against the normal
 	static Vector2f Reflect(Vector2f v, Vector2f normal)
 	{
@@ -123,6 +153,18 @@ public:
 			return v2 * (Dot(v2, v1) / v2SqrMagnitude);
 		else
 			return Vector2f();
+	}
+
+	//returns unit length vector for given angle (in radians)
+	static Vector2f ForAngle(const float angle)
+	{
+		return Vector2f(cos(angle), sin(angle));
+	}
+
+	//returns if v1 is close to v2
+	static bool Near(Vector2f v1, Vector2f v2, float distance)
+	{
+		return SqrDistance(v1, v2) < distance*distance;
 	}
 
 	//Operators--------------------------------------------------------------------------------------
@@ -188,11 +230,16 @@ public:
 		return *this;
 	}
 
-	Vector2f operator=(const Vector3D& other)
+	Vector2f operator=(const Vector3f& other)
 	{
 		x = other.x;
 		y = other.y;
 		return *this;
+	}
+
+	operator bool() const
+	{
+		return(IsValid());
 	}
 };
 
@@ -204,6 +251,11 @@ inline Vector2f operator*(float scaler, const Vector2f& v)
 inline Vector2f operator/(float scaler, const Vector2f& v)
 {
 	return Vector2f(scaler / v.x, scaler / v.y);
+}
+
+inline std::ostream& operator<<(std::ostream& os, Vector2f& v)
+{
+	return os << v.to_string();
 }
 
 #endif // !_VECTOR2F_H

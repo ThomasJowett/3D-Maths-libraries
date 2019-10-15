@@ -328,7 +328,7 @@ Quaternion Matrix4x4::ExtractRotation() const
 {
 	Quaternion q;
 
-	float trace = m[0][0] + m[1][1] + a[2][2];
+	float trace = m[0][0] + m[1][1] + m[2][2];
 
 	if (trace > 0)
 	{
@@ -336,26 +336,26 @@ Quaternion Matrix4x4::ExtractRotation() const
 		q.r = 0.25f / s;
 		q.i = (m[2][1] - m[1][2]) * s;
 		q.j = (m[0][2] - m[2][0]) * s;
-		q.z = (m[1][0] - m[0][1]) * s;
+		q.k = (m[1][0] - m[0][1]) * s;
 	}
 	else
 	{
 		if (m[0][0] > m[1][1] && m[0][0] > m[2][2]) {
-			float s = 2.0f * sqrtf(1.0f + a[0][0] - a[1][1] - a[2][2]);
+			float s = 2.0f * sqrtf(1.0f + m[0][0] - m[1][1] - m[2][2]);
 			q.r = (m[2][1] - m[1][2]) / s;
 			q.i = 0.25f * s;
 			q.j = (m[0][1] + m[1][0]) / s;
 			q.k = (m[0][2] + m[2][0]) / s;
 		}
 		else if (m[1][1] > m[2][2]) {
-			float s = 2.0f * sqrtf(1.0f + a[1][1] - a[0][0] - a[2][2]);
+			float s = 2.0f * sqrtf(1.0f + m[1][1] - m[0][0] - m[2][2]);
 			q.r = (m[0][2] - m[2][0]) / s;
 			q.i = (m[0][1] + m[1][0]) / s;
 			q.j = 0.25f * s;
 			q.k = (m[1][2] + m[2][1]) / s;
 		}
 		else {
-			float s = 2.0f * sqrtf(1.0f + a[2][2] - a[0][0] - a[1][1]);
+			float s = 2.0f * sqrtf(1.0f + m[2][2] - m[0][0] - m[1][1]);
 			q.r = (m[1][0] - m[0][1]) / s;
 			q.i = (m[0][2] + m[2][0]) / s;
 			q.j = (m[1][2] + m[2][1]) / s;

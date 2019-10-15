@@ -56,9 +56,14 @@ public:
 	}
 
 	//converts vector to a formatted string
-	std::string to_string()
+	std::string to_string()const
 	{
 		return "x: " + std::to_string(x) + " y: " + std::to_string(y) + " z: " + std::to_string(z);
+	}
+
+	bool IsValid() const
+	{
+		return (!_isnan(x) && !_isnan(y) && !_isnan(z));
 	}
 
 	//Static-------------------------------------------------------------------------------------------
@@ -175,15 +180,27 @@ public:
 		z = other.z;
 		return *this;
 	}
+
+	operator bool() const
+	{
+		return(IsValid());
+	}
 };
 
+//float * Vector3f
 inline Vector3f operator*(float scaler, const Vector3f& v)
 {
 	return Vector3f(scaler * v.x, scaler * v.y, scaler * v.z);
 }
 
+//float / Vector3f
 inline Vector3f operator/(float scaler, const Vector3f& v)
 {
 	return Vector3f(scaler / v.x, scaler / v.y, scaler / v.z);
+}
+
+inline std::ostream& operator<<(std::ostream& os, Vector3f& v)
+{
+	return os << v.to_string();
 }
 #endif // !_VECTOR3F_H
