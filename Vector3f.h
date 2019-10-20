@@ -135,7 +135,7 @@ public:
 		return Vector3f(x + other.x, y + other.y, z + other.z);
 	}
 
-	//subtracts v2 from v2
+	//subtracts v2 from v1
 	Vector3f operator-(const Vector3f & other)
 	{
 		return Vector3f(x - other.x, y - other.y, z - other.z);
@@ -197,6 +197,17 @@ inline Vector3f operator*(float scaler, const Vector3f& v)
 inline Vector3f operator/(float scaler, const Vector3f& v)
 {
 	return Vector3f(scaler / v.x, scaler / v.y, scaler / v.z);
+}
+
+//adds the two vectors together
+inline Vector3f operator+(const Vector3f & v1, const Vector3f & v2)
+{
+	return Vector3f(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+}
+
+inline Vector3f operator-(Vector3f v1, Vector3f v2)
+{
+	return Vector3f(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
 }
 
 inline std::ostream& operator<<(std::ostream& os, Vector3f& v)

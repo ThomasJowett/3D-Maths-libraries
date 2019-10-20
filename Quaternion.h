@@ -181,7 +181,7 @@ public:
 	//converts quaternion to a formatted string
 	std::string to_string()
 	{
-		return "r: " + std::to_string(r) + "i: " + std::to_string(i) + "j: " + std::to_string(j) + "k: " + std::to_string(k);
+		return "r: " + std::to_string(r) + " i: " + std::to_string(i) + " j: " + std::to_string(j) + " k: " + std::to_string(k);
 	}
 
 	//Static -----------------------------------------------------------------------------------
@@ -316,5 +316,10 @@ public:
 		return RotateVectorByQuaternion(V);
 	}
 };
+
+inline std::ostream& operator<<(std::ostream& os, Quaternion& q)
+{
+	return os << q.to_string();
+}
 
 #endif // !_QUATERNION_H

@@ -253,6 +253,16 @@ inline Vector2f operator/(float scaler, const Vector2f& v)
 	return Vector2f(scaler / v.x, scaler / v.y);
 }
 
+inline Vector2f operator+(const Vector2f& v1, const Vector2f& v2)
+{
+	return Vector2f(v1.x + v2.x, v1.y + v2.y);
+}
+
+inline Vector2f operator-(const Vector2f& v1, const Vector2f& v2)
+{
+	return Vector2f(v1.x - v2.x, v1.y - v2.y);
+}
+
 inline std::ostream& operator<<(std::ostream& os, Vector2f& v)
 {
 	return os << v.to_string();
