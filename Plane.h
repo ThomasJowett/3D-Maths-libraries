@@ -94,7 +94,10 @@ public:
 	}
 
 	// Plane intersection
-	static bool PlanePlaneIntersection(const Plane &p1, const Plane &p2, Line)
+	static bool PlanePlaneIntersection(const Plane &p1, const Plane &p2, Line3D& intersectionLine)
+	{
+		return false;
+	}
 };
 
 inline std::ostream& operator<<(std::ostream& os, Plane& p)

@@ -205,7 +205,7 @@ inline Vector3f operator+(const Vector3f & v1, const Vector3f & v2)
 	return Vector3f(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
 }
 
-inline Vector3f operator-(Vector3f v1, Vector3f v2)
+inline Vector3f operator-(const Vector3f& v1, const Vector3f& v2)
 {
 	return Vector3f(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
 }
