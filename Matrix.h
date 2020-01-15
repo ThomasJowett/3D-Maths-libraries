@@ -12,6 +12,7 @@ class Matrix4x4
 public:
 	float m[4][4];
 
+	//	identity matrix
 	Matrix4x4()
 	{
 		m[0][0] = 1.0f;
