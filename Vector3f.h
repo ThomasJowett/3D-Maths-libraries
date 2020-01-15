@@ -123,6 +123,12 @@ public:
 		return Vector3f(x * scaler, y * scaler, z * scaler);
 	}
 
+	// dot product
+	float operator*(const Vector3f other)
+	{
+		return Dot(*this, other);
+	}
+
 	//divides each component of the vector by the scaler
 	Vector3f operator/(float scaler)
 	{

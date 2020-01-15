@@ -174,9 +174,9 @@ public:
 		return Vector2f(x * scaler, y *scaler);
 	}
 
-	Vector2f operator*(Vector2f other)
+	float operator*(Vector2f other)
 	{
-		return Vector2f(x * other.x, y * other.y);
+		return Dot(*this, other);
 	}
 
 	Vector2f operator/(float scaler)
