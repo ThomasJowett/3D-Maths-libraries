@@ -43,7 +43,9 @@ public:
 	Vector2f const GetNormalized()
 	{
 		float magnitude = Magnitude();
-		return Vector2f(x / magnitude, y / magnitude);
+		if(magnitude > 0.0f)
+			return Vector2f(x / magnitude, y / magnitude);
+		return Vector2f();
 	}
 
 	//set this vectors length to 1

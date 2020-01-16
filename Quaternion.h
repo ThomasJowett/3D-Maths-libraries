@@ -44,6 +44,19 @@ public:
 		(*this) = Quaternion(Vector3f(theta_Roll, theta_Pitch, theta_Yaw));
 	}
 
+	//from an axis and an angle in radians
+	Quaternion(const Vector3f axis, float angle)
+	{
+		Vector3f axisNorm = axis;
+		axisNorm.Normalize();
+
+		double s = sin(angle / 2.0f);
+		i = axisNorm.x * s;
+		j = axisNorm.y * s;
+		k = axisNorm.z * s;
+		r = cos(angle / 2.0f);
+	}
+
 	//Destructor---------------------------------------------------------------------------------------
 	~Quaternion() = default;
 
@@ -124,6 +137,7 @@ public:
 		return euler;
 	}
 
+	//returns this quaternion as an axis and an angle
 	void AxisAngle(float& angle, Vector3f& axis) const
 	{
 		Quaternion q = *this;
