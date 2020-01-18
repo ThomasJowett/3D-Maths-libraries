@@ -50,7 +50,7 @@ public:
 		Vector3f axisNorm = axis;
 		axisNorm.Normalize();
 
-		double s = sin(angle / 2.0f);
+		float s = sin(angle / 2.0f);
 		i = axisNorm.x * s;
 		j = axisNorm.y * s;
 		k = axisNorm.z * s;
