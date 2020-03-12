@@ -63,7 +63,7 @@ public:
 
 	bool IsValid() const
 	{
-		return (!_isnan(x) && !_isnan(y) && !_isnan(z));
+		return (!std::isnan(x) && !std::isnan(y) && !std::isnan(z));
 	}
 
 	//Static-------------------------------------------------------------------------------------------

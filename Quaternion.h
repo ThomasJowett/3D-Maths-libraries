@@ -221,7 +221,7 @@ public:
 
 		//calculate temporary values
 		float halfTheta = acos(cosHalfTheta);
-		float sinHalfTheta = (float)sqrt(1.0 - cosHalfTheta * cosHalfTheta);
+		float sinHalfTheta = (float)sqrt(1.0f - cosHalfTheta * cosHalfTheta);
 
 		//if theta = 180 degrees then result is not fully defined
 		//we could rotate around any axis normal to a or b
