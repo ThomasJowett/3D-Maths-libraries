@@ -2,7 +2,7 @@
 #define _VECTOR3F_H
 
 #include <string>
-#include <math.h>
+#include <cmath>
 
 class Vector3f
 {
