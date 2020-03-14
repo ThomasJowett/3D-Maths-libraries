@@ -83,7 +83,7 @@ public:
 		d = -d;
 	}
 
-	__forceinline Vector3f Normal()const
+	Vector3f Normal()const
 	{
 		return Vector3f(a, b, c);
 	}
