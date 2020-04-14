@@ -441,6 +441,14 @@ public:
 	}
 };
 
+inline Vector2f& operator*(Matrix4x4& m, Vector2f& v)
+{
+	return Matrix4x4::MulVec2(m, v);
+}
+inline Vector3f& operator*(Matrix4x4& m, Vector3f& v)
+{
+	return Matrix4x4::MulVec3(m, v);
+}
 inline std::ostream& operator<<(std::ostream& os, Matrix4x4& m)
 {
 	return os << m.to_string();
