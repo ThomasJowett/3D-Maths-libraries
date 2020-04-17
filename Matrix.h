@@ -278,17 +278,17 @@ public:
 	static Vector2f MulVec2(Matrix4x4 matrix, Vector2f vector)
 	{
 		Vector2f result;
-		result.x = (matrix(0, 0) * vector.x) + (matrix(0, 1) * vector.x) + (matrix(0, 3) * vector.x);
-		result.y = (matrix(1, 0) * vector.y) + (matrix(1, 1) * vector.y) + (matrix(1, 3) * vector.y);
+		result.x = (matrix(0, 0) * vector.x) + (matrix(0, 1) * vector.y) + (matrix(0, 3));
+		result.y = (matrix(1, 0) * vector.x) + (matrix(1, 1) * vector.y) + (matrix(1, 3));
 		return result;
 	}
 
 	static Vector3f MulVec3(Matrix4x4 matrix, Vector3f vector)
 	{
 		Vector3f result;
-		result.x = (matrix(0, 0) * vector.x) + (matrix(0, 1) * vector.x) + (matrix(0, 2) * vector.x) + (matrix(0, 3) * vector.x);
-		result.y = (matrix(1, 0) * vector.y) + (matrix(1, 1) * vector.y) + (matrix(1, 2) * vector.y) + (matrix(1, 3) * vector.y);
-		result.z = (matrix(2, 0) * vector.z) + (matrix(2, 1) * vector.z) + (matrix(2, 2) * vector.z) + (matrix(2, 3) * vector.z);
+		result.x = (matrix(0, 0) * vector.x) + (matrix(0, 1) * vector.y) + (matrix(0, 2) * vector.z) + (matrix(0, 3));
+		result.y = (matrix(1, 0) * vector.x) + (matrix(1, 1) * vector.y) + (matrix(1, 2) * vector.z) + (matrix(1, 3));
+		result.z = (matrix(2, 0) * vector.x) + (matrix(2, 1) * vector.y) + (matrix(2, 2) * vector.z) + (matrix(2, 3));
 		return result;
 	}
 
@@ -441,11 +441,11 @@ public:
 	}
 };
 
-inline Vector2f& operator*(Matrix4x4& m, Vector2f& v)
+inline Vector2f operator*(Matrix4x4& m, Vector2f& v)
 {
 	return Matrix4x4::MulVec2(m, v);
 }
-inline Vector3f& operator*(Matrix4x4& m, Vector3f& v)
+inline Vector3f operator*(Matrix4x4& m, Vector3f& v)
 {
 	return Matrix4x4::MulVec3(m, v);
 }
