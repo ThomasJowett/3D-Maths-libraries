@@ -441,11 +441,11 @@ public:
 	}
 };
 
-inline Vector2f operator*(Matrix4x4& m, Vector2f& v)
+inline Vector2f operator*(const Matrix4x4& m, const Vector2f& v)
 {
 	return Matrix4x4::MulVec2(m, v);
 }
-inline Vector3f operator*(Matrix4x4& m, Vector3f& v)
+inline Vector3f operator*(const Matrix4x4& m, const Vector3f& v)
 {
 	return Matrix4x4::MulVec3(m, v);
 }
