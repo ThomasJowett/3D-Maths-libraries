@@ -120,26 +120,26 @@ public:
 
 	static Matrix4x4 Rotate(float r, float i, float j, float k)
 	{
-		Matrix4x4 result;
-		result.m[0][0] = 1 - 2 * j * j - 2 * k * k;
-		result.m[0][1] = 2 * i * j - 2 * k * r;
-		result.m[0][2] = 2 * i * k + 2 * j * r;
-		result.m[0][3] = 0.0f;
+		Matrix4x4 result(
+		1 - 2 * j * j - 2 * k * k,
+		2 * i * j - 2 * k * r,
+		2 * i * k + 2 * j * r,
+		0.0f,
 
-		result.m[1][0] = 2 * i * j + 2 * r * k;
-		result.m[1][1] = 1 - 2 * i * i - 2 * k * k;
-		result.m[1][2] = 2 * j * k - 2 * r * i;
-		result.m[1][3] = 0.0f;
+		2 * i * j + 2 * r * k,
+		1 - 2 * i * i - 2 * k * k,
+		2 * j * k - 2 * r * i,
+		0.0f,
 
-		result.m[2][0] = 2 * i * k - 2 * r * j;
-		result.m[2][1] = 2 * j * k + 2 * r * i;
-		result.m[2][2] = 1 - 2 * i * i - 2 * j * j;
-		result.m[2][3] = 0.0f;
+		2 * i * k - 2 * r * j,
+		2 * j * k + 2 * r * i,
+		1 - 2 * i * i - 2 * j * j,
+		0.0f,
 
-		result.m[3][0] = 0.0f;
-		result.m[3][1] = 0.0f;
-		result.m[3][2] = 0.0f;
-		result.m[3][3] = 1.0f;
+		0.0f,
+		0.0f,
+		0.0f,
+		1.0f);
 		return result;
 	}
 
@@ -148,55 +148,120 @@ public:
 		return Rotate(rotation.r, rotation.i, rotation.j, rotation.k);
 	}
 
-	static Matrix4x4 Perspective(float fovY, float aspectRatio, float nearDepth, float farDepth)
+	// Right Hand Perspective Matrix
+	static Matrix4x4 PerspectiveRH(float fovY, float aspectRatio, float nearDepth, float farDepth)
 	{
-		float tanHalfFovY = (tan(fovY / 2));
+		float cosFov = cos(fovY * 0.5f);
+		float sinFov = sin(fovY * 0.5f);
 
-		Matrix4x4 result;
-		result.m[0][0] = 1 / (tanHalfFovY * aspectRatio);
-		result.m[0][1] = 0.0f;
-		result.m[0][2] = 0.0f;
-		result.m[0][3] = 0.0f;
+		float height = cosFov / sinFov;
+		float width = height / aspectRatio;
+		float fRange = farDepth / (nearDepth - farDepth);
 
-		result.m[1][0] = 0.0f;
-		result.m[1][1] = 1 / tanHalfFovY;
-		result.m[1][2] = 0.0f;
-		result.m[1][3] = 0.0f;
+		Matrix4x4 result(
+			width,
+			0.0f,
+			0.0f,
+			0.0f,
 
-		result.m[2][0] = 0.0f;
-		result.m[2][1] = 0.0f;
-		result.m[2][2] = farDepth / (nearDepth - farDepth);
-		result.m[2][3] = -1.0f;
+			0.0f,
+			height,
+			0.0f,
+			0.0f,
 
-		result.m[3][0] = 0.0f;
-		result.m[3][1] = 0.0f;
-		result.m[3][2] = -(farDepth * nearDepth) / (farDepth - nearDepth);
-		result.m[3][3] = 0.0f;
+			0.0f,
+			0.0f,
+			fRange,
+			-1.0f,
+
+			0.0f,
+			0.0f,
+			fRange * nearDepth,
+			0.0f);
 		return result;
 	}
 
-	static Matrix4x4 Orthographic(float left, float right, float bottom, float top, float nearDepth, float farDepth)
+	// Left Hand Perspective Matrix
+	static Matrix4x4 PerspectiveLH(float fovY, float aspectRatio, float nearDepth, float farDepth)
 	{
-		Matrix4x4 result;
-		result.m[0][0] = 2 / (right - left);
-		result.m[0][1] = 0.0f;
-		result.m[0][2] = 0.0f;
-		result.m[0][3] = 0.0f;
+		float sinFov = sin(fovY * 0.5f);
+		float cosFov = cos(fovY * 0.5f);
 
-		result.m[1][0] = 0.0f;
-		result.m[1][1] = 2 / (top - bottom);
-		result.m[1][2] = 0.0f;
-		result.m[1][3] = 0.0f;
+		float height = cosFov / sinFov;
+		float width = height / aspectRatio;
+		float fRange = farDepth / (farDepth - nearDepth);
 
-		result.m[2][0] = 0.0f;
-		result.m[2][1] = 0.0f;
-		result.m[2][2] = -2 / (farDepth - nearDepth);
-		result.m[2][3] = 0.0f;
+		Matrix4x4 result(
+			width,
+			0.0f,
+			0.0f,
+			0.0f,
 
-		result.m[3][0] = -((right + left) / (right - left));
-		result.m[3][1] = -((top + bottom) / (top - bottom));
-		result.m[3][2] = -((farDepth + nearDepth) / (farDepth - nearDepth));
-		result.m[3][3] = 1.0f;
+			0.0f,
+			height,
+			0.0f,
+			0.0f,
+
+			0.0f,
+			0.0f,
+			fRange,
+			1.0f,
+
+			0.0f,
+			0.0f,
+			-fRange * nearDepth,
+			0.0f);
+		return result;
+	}
+
+	static Matrix4x4 OrthographicRH(float left, float right, float bottom, float top, float nearDepth, float farDepth)
+	{
+		Matrix4x4 result(
+			2 / (right - left),
+			0.0f,
+			0.0f,
+			0.0f,
+
+			0.0f,
+			2 / (top - bottom),
+			0.0f,
+			0.0f,
+
+			0.0f,
+			0.0f,
+			-2 / (farDepth - nearDepth),
+			0.0f,
+
+			-((right + left) / (right - left)),
+			-((top + bottom) / (top - bottom)),
+			-((farDepth + nearDepth) / (farDepth - nearDepth)),
+			1.0f);
+		return result;
+	}
+
+	static Matrix4x4 OrthographicLH(float left, float right, float bottom, float top, float nearDepth, float farDepth)
+	{
+		Matrix4x4 result(
+			2 / (right - left),
+			0.0f,
+			0.0f,
+			0.0f,
+
+			0.0f,
+			2 / (top - bottom),
+			0.0f,
+			0.0f,
+
+			0.0f,
+			0.0f,
+			-2 / (farDepth - nearDepth),
+			0.0f,
+
+			-((right + left) / (right - left)),
+			-((top + bottom) / (top - bottom)),
+			-((farDepth + nearDepth) / (farDepth - nearDepth)),
+			1.0f);
+
 		return result;
 	}
 
@@ -206,29 +271,63 @@ public:
 		Vector3f s = (Vector3f::Cross(f, up)).GetNormalized();
 		Vector3f u = Vector3f::Cross(s, f);
 
-		Matrix4x4 result;
+		Matrix4x4 result(
+		s.x,
+		u.x,
+		-f.x,
+		0.0f,
 
-		result.m[0][0] = s.x;
-		result.m[0][1] = u.x;
-		result.m[0][2] = -f.x;
-		result.m[0][3] = 0.0f;
+		s.y,
+		u.y,
+		-f.y,
+		0.0f,
 
-		result.m[1][0] = s.y;
-		result.m[1][1] = u.y;
-		result.m[1][2] = -f.y;
-		result.m[1][3] = 0.0f;
+		s.z,
+		u.z,
+		-f.z,
+		0.0f,
 
-		result.m[2][0] = s.z;
-		result.m[2][1] = u.z;
-		result.m[2][2] = -f.z;
-		result.m[2][3] = 0.0f;
-
-		result.m[3][0] = -Vector3f::Dot(s, eyePosition);
-		result.m[3][1] = -Vector3f::Dot(up, eyePosition);
-		result.m[3][2] = Vector3f::Dot(f, eyePosition);
-		result.m[3][3] = 1.0f;
+		-Vector3f::Dot(s, eyePosition),
+		-Vector3f::Dot(up, eyePosition),
+		Vector3f::Dot(f, eyePosition),
+		1.0f);
 
 		return result;
+	}
+
+	static float Determinant(const Matrix4x4& matrix)
+	{
+		return
+			matrix.m[0][3] * matrix.m[1][2] * matrix.m[2][1] * matrix.m[3][0] - matrix.m[0][2] * matrix.m[1][3] * matrix.m[2][1] * matrix.m[3][0] - matrix.m[0][3] * matrix.m[1][1] * matrix.m[2][2] * matrix.m[3][0] + matrix.m[0][1] * matrix.m[1][3] * matrix.m[2][2] * matrix.m[3][0] +
+			matrix.m[0][2] * matrix.m[1][1] * matrix.m[2][3] * matrix.m[3][0] - matrix.m[0][1] * matrix.m[1][2] * matrix.m[2][3] * matrix.m[3][0] - matrix.m[0][3] * matrix.m[1][2] * matrix.m[2][0] * matrix.m[3][1] + matrix.m[0][2] * matrix.m[1][3] * matrix.m[2][0] * matrix.m[3][1] +
+			matrix.m[0][3] * matrix.m[1][0] * matrix.m[2][2] * matrix.m[3][1] - matrix.m[0][0] * matrix.m[1][3] * matrix.m[2][2] * matrix.m[3][1] - matrix.m[0][2] * matrix.m[1][0] * matrix.m[2][3] * matrix.m[3][1] + matrix.m[0][0] * matrix.m[1][2] * matrix.m[2][3] * matrix.m[3][1] +
+			matrix.m[0][3] * matrix.m[1][1] * matrix.m[2][0] * matrix.m[3][2] - matrix.m[0][1] * matrix.m[1][3] * matrix.m[2][0] * matrix.m[3][2] - matrix.m[0][3] * matrix.m[1][0] * matrix.m[2][1] * matrix.m[3][2] + matrix.m[0][0] * matrix.m[1][3] * matrix.m[2][1] * matrix.m[3][2] +
+			matrix.m[0][1] * matrix.m[1][0] * matrix.m[2][3] * matrix.m[3][2] - matrix.m[0][0] * matrix.m[1][1] * matrix.m[2][3] * matrix.m[3][2] - matrix.m[0][2] * matrix.m[1][1] * matrix.m[2][0] * matrix.m[3][3] + matrix.m[0][1] * matrix.m[1][2] * matrix.m[2][0] * matrix.m[3][3] +
+			matrix.m[0][2] * matrix.m[1][0] * matrix.m[2][1] * matrix.m[3][3] - matrix.m[0][0] * matrix.m[1][2] * matrix.m[2][1] * matrix.m[3][3] - matrix.m[0][1] * matrix.m[1][0] * matrix.m[2][2] * matrix.m[3][3] + matrix.m[0][0] * matrix.m[1][1] * matrix.m[2][2] * matrix.m[3][3];
+	}
+
+	static Matrix4x4 Inverse(const Matrix4x4& matrix)
+	{
+		Matrix4x4 result(
+			matrix.m[1][2] * matrix.m[2][3] * matrix.m[3][1] - matrix.m[1][3] * matrix.m[2][2] * matrix.m[3][1] + matrix.m[1][3] * matrix.m[2][1] * matrix.m[3][2] - matrix.m[1][1] * matrix.m[2][3] * matrix.m[3][2] - matrix.m[1][2] * matrix.m[2][1] * matrix.m[3][3] + matrix.m[1][1] * matrix.m[2][2] * matrix.m[3][3],
+			matrix.m[0][3] * matrix.m[2][2] * matrix.m[3][1] - matrix.m[0][2] * matrix.m[2][3] * matrix.m[3][1] - matrix.m[0][3] * matrix.m[2][1] * matrix.m[3][2] + matrix.m[0][1] * matrix.m[2][3] * matrix.m[3][2] + matrix.m[0][2] * matrix.m[2][1] * matrix.m[3][3] - matrix.m[0][1] * matrix.m[2][2] * matrix.m[3][3],
+			matrix.m[0][2] * matrix.m[1][3] * matrix.m[3][1] - matrix.m[0][3] * matrix.m[1][2] * matrix.m[3][1] + matrix.m[0][3] * matrix.m[1][1] * matrix.m[3][2] - matrix.m[0][1] * matrix.m[1][3] * matrix.m[3][2] - matrix.m[0][2] * matrix.m[1][1] * matrix.m[3][3] + matrix.m[0][1] * matrix.m[1][2] * matrix.m[3][3],
+			matrix.m[0][3] * matrix.m[1][2] * matrix.m[2][1] - matrix.m[0][2] * matrix.m[1][3] * matrix.m[2][1] - matrix.m[0][3] * matrix.m[1][1] * matrix.m[2][2] + matrix.m[0][1] * matrix.m[1][3] * matrix.m[2][2] + matrix.m[0][2] * matrix.m[1][1] * matrix.m[2][3] - matrix.m[0][1] * matrix.m[1][2] * matrix.m[2][3],
+			matrix.m[1][3] * matrix.m[2][2] * matrix.m[3][0] - matrix.m[1][2] * matrix.m[2][3] * matrix.m[3][0] - matrix.m[1][3] * matrix.m[2][0] * matrix.m[3][2] + matrix.m[1][0] * matrix.m[2][3] * matrix.m[3][2] + matrix.m[1][2] * matrix.m[2][0] * matrix.m[3][3] - matrix.m[1][0] * matrix.m[2][2] * matrix.m[3][3],
+			matrix.m[0][2] * matrix.m[2][3] * matrix.m[3][0] - matrix.m[0][3] * matrix.m[2][2] * matrix.m[3][0] + matrix.m[0][3] * matrix.m[2][0] * matrix.m[3][2] - matrix.m[0][0] * matrix.m[2][3] * matrix.m[3][2] - matrix.m[0][2] * matrix.m[2][0] * matrix.m[3][3] + matrix.m[0][0] * matrix.m[2][2] * matrix.m[3][3],
+			matrix.m[0][3] * matrix.m[1][2] * matrix.m[3][0] - matrix.m[0][2] * matrix.m[1][3] * matrix.m[3][0] - matrix.m[0][3] * matrix.m[1][0] * matrix.m[3][2] + matrix.m[0][0] * matrix.m[1][3] * matrix.m[3][2] + matrix.m[0][2] * matrix.m[1][0] * matrix.m[3][3] - matrix.m[0][0] * matrix.m[1][2] * matrix.m[3][3],
+			matrix.m[0][2] * matrix.m[1][3] * matrix.m[2][0] - matrix.m[0][3] * matrix.m[1][2] * matrix.m[2][0] + matrix.m[0][3] * matrix.m[1][0] * matrix.m[2][2] - matrix.m[0][0] * matrix.m[1][3] * matrix.m[2][2] - matrix.m[0][2] * matrix.m[1][0] * matrix.m[2][3] + matrix.m[0][0] * matrix.m[1][2] * matrix.m[2][3],
+			matrix.m[1][1] * matrix.m[2][3] * matrix.m[3][0] - matrix.m[1][3] * matrix.m[2][1] * matrix.m[3][0] + matrix.m[1][3] * matrix.m[2][0] * matrix.m[3][1] - matrix.m[1][0] * matrix.m[2][3] * matrix.m[3][1] - matrix.m[1][1] * matrix.m[2][0] * matrix.m[3][3] + matrix.m[1][0] * matrix.m[2][1] * matrix.m[3][3],
+			matrix.m[0][3] * matrix.m[2][1] * matrix.m[3][0] - matrix.m[0][1] * matrix.m[2][3] * matrix.m[3][0] - matrix.m[0][3] * matrix.m[2][0] * matrix.m[3][1] + matrix.m[0][0] * matrix.m[2][3] * matrix.m[3][1] + matrix.m[0][1] * matrix.m[2][0] * matrix.m[3][3] - matrix.m[0][0] * matrix.m[2][1] * matrix.m[3][3],
+			matrix.m[0][1] * matrix.m[1][3] * matrix.m[3][0] - matrix.m[0][3] * matrix.m[1][1] * matrix.m[3][0] + matrix.m[0][3] * matrix.m[1][0] * matrix.m[3][1] - matrix.m[0][0] * matrix.m[1][3] * matrix.m[3][1] - matrix.m[0][1] * matrix.m[1][0] * matrix.m[3][3] + matrix.m[0][0] * matrix.m[1][1] * matrix.m[3][3],
+			matrix.m[0][3] * matrix.m[1][1] * matrix.m[2][0] - matrix.m[0][1] * matrix.m[1][3] * matrix.m[2][0] - matrix.m[0][3] * matrix.m[1][0] * matrix.m[2][1] + matrix.m[0][0] * matrix.m[1][3] * matrix.m[2][1] + matrix.m[0][1] * matrix.m[1][0] * matrix.m[2][3] - matrix.m[0][0] * matrix.m[1][1] * matrix.m[2][3],
+			matrix.m[1][2] * matrix.m[2][1] * matrix.m[3][0] - matrix.m[1][1] * matrix.m[2][2] * matrix.m[3][0] - matrix.m[1][2] * matrix.m[2][0] * matrix.m[3][1] + matrix.m[1][0] * matrix.m[2][2] * matrix.m[3][1] + matrix.m[1][1] * matrix.m[2][0] * matrix.m[3][2] - matrix.m[1][0] * matrix.m[2][1] * matrix.m[3][2],
+			matrix.m[0][1] * matrix.m[2][2] * matrix.m[3][0] - matrix.m[0][2] * matrix.m[2][1] * matrix.m[3][0] + matrix.m[0][2] * matrix.m[2][0] * matrix.m[3][1] - matrix.m[0][0] * matrix.m[2][2] * matrix.m[3][1] - matrix.m[0][1] * matrix.m[2][0] * matrix.m[3][2] + matrix.m[0][0] * matrix.m[2][1] * matrix.m[3][2],
+			matrix.m[0][2] * matrix.m[1][1] * matrix.m[3][0] - matrix.m[0][1] * matrix.m[1][2] * matrix.m[3][0] - matrix.m[0][2] * matrix.m[1][0] * matrix.m[3][1] + matrix.m[0][0] * matrix.m[1][2] * matrix.m[3][1] + matrix.m[0][1] * matrix.m[1][0] * matrix.m[3][2] - matrix.m[0][0] * matrix.m[1][1] * matrix.m[3][2],
+			matrix.m[0][1] * matrix.m[1][2] * matrix.m[2][0] - matrix.m[0][2] * matrix.m[1][1] * matrix.m[2][0] + matrix.m[0][2] * matrix.m[1][0] * matrix.m[2][1] - matrix.m[0][0] * matrix.m[1][2] * matrix.m[2][1] - matrix.m[0][1] * matrix.m[1][0] * matrix.m[2][2] + matrix.m[0][0] * matrix.m[1][1] * matrix.m[2][2]
+		);
+
+		return MulFloat(result, Matrix4x4::Determinant(matrix));
 	}
 
 	static void FrustumPlanes(Plane planes[6], Matrix4x4 matrix)
@@ -275,6 +374,28 @@ public:
 		}
 	}
 
+	static Matrix4x4 MulFloat(Matrix4x4 m, float scale)
+	{
+		return Matrix4x4(
+			m.m[0][0] * scale,
+			m.m[0][1] * scale,
+			m.m[0][2] * scale,
+			m.m[0][3] * scale,
+			m.m[1][0] * scale,
+			m.m[1][1] * scale,
+			m.m[1][2] * scale,
+			m.m[1][3] * scale,
+			m.m[2][0] * scale,
+			m.m[2][1] * scale,
+			m.m[2][2] * scale,
+			m.m[2][3] * scale,
+			m.m[3][0] * scale,
+			m.m[3][1] * scale,
+			m.m[3][2] * scale,
+			m.m[3][3] * scale
+		);
+	}
+
 	static Vector2f MulVec2(Matrix4x4 matrix, Vector2f vector)
 	{
 		Vector2f result;
@@ -285,27 +406,27 @@ public:
 
 	static Vector3f MulVec3(Matrix4x4 matrix, Vector3f vector)
 	{
-		Vector3f result;
-		result.x = (matrix(0, 0) * vector.x) + (matrix(0, 1) * vector.y) + (matrix(0, 2) * vector.z) + (matrix(0, 3));
-		result.y = (matrix(1, 0) * vector.x) + (matrix(1, 1) * vector.y) + (matrix(1, 2) * vector.z) + (matrix(1, 3));
-		result.z = (matrix(2, 0) * vector.x) + (matrix(2, 1) * vector.y) + (matrix(2, 2) * vector.z) + (matrix(2, 3));
+		Vector3f result(
+		(matrix(0, 0) * vector.x) + (matrix(0, 1) * vector.y) + (matrix(0, 2) * vector.z) + (matrix(0, 3)),
+		(matrix(1, 0) * vector.x) + (matrix(1, 1) * vector.y) + (matrix(1, 2) * vector.z) + (matrix(1, 3)),
+		(matrix(2, 0) * vector.x) + (matrix(2, 1) * vector.y) + (matrix(2, 2) * vector.z) + (matrix(2, 3)));
 		return result;
 	}
 
 	Vector2f ToVector2f() const
 	{
-		Vector2f result;
-		result.x = m[0][0] + m[0][1] + m[0][3];
-		result.y = m[1][0] + m[1][1] + m[1][3];
+		Vector2f result(
+		m[0][0] + m[0][1] + m[0][3],
+		m[1][0] + m[1][1] + m[1][3]);
 		return result;
 	}
 
 	Vector3f ToVector3f() const
 	{
-		Vector3f result;
-		result.x = m[0][0] + m[0][1] + m[0][2] + m[0][3];
-		result.y = m[1][0] + m[1][1] + m[1][2] + m[1][3];
-		result.z = m[2][0] + m[2][1] + m[2][2] + m[2][3];
+		Vector3f result(
+		m[0][0] + m[0][1] + m[0][2] + m[0][3],
+		m[1][0] + m[1][1] + m[1][2] + m[1][3],
+		m[2][0] + m[2][1] + m[2][2] + m[2][3]);
 		return Vector3f();
 	}
 
@@ -316,10 +437,10 @@ public:
 
 	Vector3f ExtractScale()	const
 	{
-		Vector3f result;
-		result.x = m[0][0] + m[0][1] + m[0][2];
-		result.y = m[1][0] + m[1][1] + m[1][2];
-		result.z = m[2][0] + m[2][1] + m[2][2];
+		Vector3f result(
+		m[0][0] + m[0][1] + m[0][2],
+		m[1][0] + m[1][1] + m[1][2],
+		m[2][0] + m[2][1] + m[2][2]);
 		return result;
 	}
 
@@ -448,6 +569,10 @@ inline Vector2f operator*(const Matrix4x4& m, const Vector2f& v)
 inline Vector3f operator*(const Matrix4x4& m, const Vector3f& v)
 {
 	return Matrix4x4::MulVec3(m, v);
+}
+inline Matrix4x4 operator*(const Matrix4x4& m, const float& f)
+{
+	return Matrix4x4::MulFloat(m, f);
 }
 inline std::ostream& operator<<(std::ostream& os, Matrix4x4& m)
 {

@@ -216,7 +216,7 @@ inline Vector3f operator-(const Vector3f& v1, const Vector3f& v2)
 	return Vector3f(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
 }
 
-inline std::ostream& operator<<(std::ostream& os, Vector3f& v)
+inline std::ostream& operator<<(std::ostream& os, const Vector3f& v)
 {
 	return os << v.to_string();
 }
