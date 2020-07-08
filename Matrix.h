@@ -63,6 +63,30 @@ public:
 		m[3][3] = m33;
 	}
 
+	Matrix4x4(const Matrix4x4& matrix)
+	{
+
+		m[0][0] = matrix.m[0][0];
+		m[0][1] = matrix.m[0][1];
+		m[0][2] = matrix.m[0][2];
+		m[0][3] = matrix.m[0][3];
+
+		m[1][0] = matrix.m[1][0];
+		m[1][1] = matrix.m[1][1];
+		m[1][2] = matrix.m[1][2];
+		m[1][3] = matrix.m[1][3];
+
+		m[2][0] = matrix.m[2][0];
+		m[2][1] = matrix.m[2][1];
+		m[2][2] = matrix.m[2][2];
+		m[2][3] = matrix.m[2][3];
+
+		m[3][0] = matrix.m[3][0];
+		m[3][1] = matrix.m[3][1];
+		m[3][2] = matrix.m[3][2];
+		m[3][3] = matrix.m[3][3];
+	}
+
 	~Matrix4x4() = default;
 
 	static Matrix4x4 Translate(Vector3f translation)
@@ -121,25 +145,25 @@ public:
 	static Matrix4x4 Rotate(float r, float i, float j, float k)
 	{
 		Matrix4x4 result(
-		1 - 2 * j * j - 2 * k * k,
-		2 * i * j - 2 * k * r,
-		2 * i * k + 2 * j * r,
-		0.0f,
+			1 - 2 * j * j - 2 * k * k,
+			2 * i * j - 2 * k * r,
+			2 * i * k + 2 * j * r,
+			0.0f,
 
-		2 * i * j + 2 * r * k,
-		1 - 2 * i * i - 2 * k * k,
-		2 * j * k - 2 * r * i,
-		0.0f,
+			2 * i * j + 2 * r * k,
+			1 - 2 * i * i - 2 * k * k,
+			2 * j * k - 2 * r * i,
+			0.0f,
 
-		2 * i * k - 2 * r * j,
-		2 * j * k + 2 * r * i,
-		1 - 2 * i * i - 2 * j * j,
-		0.0f,
+			2 * i * k - 2 * r * j,
+			2 * j * k + 2 * r * i,
+			1 - 2 * i * i - 2 * j * j,
+			0.0f,
 
-		0.0f,
-		0.0f,
-		0.0f,
-		1.0f);
+			0.0f,
+			0.0f,
+			0.0f,
+			1.0f);
 		return result;
 	}
 
@@ -272,25 +296,25 @@ public:
 		Vector3f u = Vector3f::Cross(s, f);
 
 		Matrix4x4 result(
-		s.x,
-		u.x,
-		-f.x,
-		0.0f,
+			s.x,
+			u.x,
+			-f.x,
+			0.0f,
 
-		s.y,
-		u.y,
-		-f.y,
-		0.0f,
+			s.y,
+			u.y,
+			-f.y,
+			0.0f,
 
-		s.z,
-		u.z,
-		-f.z,
-		0.0f,
+			s.z,
+			u.z,
+			-f.z,
+			0.0f,
 
-		-Vector3f::Dot(s, eyePosition),
-		-Vector3f::Dot(up, eyePosition),
-		Vector3f::Dot(f, eyePosition),
-		1.0f);
+			-Vector3f::Dot(s, eyePosition),
+			-Vector3f::Dot(up, eyePosition),
+			Vector3f::Dot(f, eyePosition),
+			1.0f);
 
 		return result;
 	}
@@ -407,26 +431,26 @@ public:
 	static Vector3f MulVec3(Matrix4x4 matrix, Vector3f vector)
 	{
 		Vector3f result(
-		(matrix(0, 0) * vector.x) + (matrix(0, 1) * vector.y) + (matrix(0, 2) * vector.z) + (matrix(0, 3)),
-		(matrix(1, 0) * vector.x) + (matrix(1, 1) * vector.y) + (matrix(1, 2) * vector.z) + (matrix(1, 3)),
-		(matrix(2, 0) * vector.x) + (matrix(2, 1) * vector.y) + (matrix(2, 2) * vector.z) + (matrix(2, 3)));
+			(matrix(0, 0) * vector.x) + (matrix(0, 1) * vector.y) + (matrix(0, 2) * vector.z) + (matrix(0, 3)),
+			(matrix(1, 0) * vector.x) + (matrix(1, 1) * vector.y) + (matrix(1, 2) * vector.z) + (matrix(1, 3)),
+			(matrix(2, 0) * vector.x) + (matrix(2, 1) * vector.y) + (matrix(2, 2) * vector.z) + (matrix(2, 3)));
 		return result;
 	}
 
 	Vector2f ToVector2f() const
 	{
 		Vector2f result(
-		m[0][0] + m[0][1] + m[0][3],
-		m[1][0] + m[1][1] + m[1][3]);
+			m[0][0] + m[0][1] + m[0][3],
+			m[1][0] + m[1][1] + m[1][3]);
 		return result;
 	}
 
 	Vector3f ToVector3f() const
 	{
 		Vector3f result(
-		m[0][0] + m[0][1] + m[0][2] + m[0][3],
-		m[1][0] + m[1][1] + m[1][2] + m[1][3],
-		m[2][0] + m[2][1] + m[2][2] + m[2][3]);
+			m[0][0] + m[0][1] + m[0][2] + m[0][3],
+			m[1][0] + m[1][1] + m[1][2] + m[1][3],
+			m[2][0] + m[2][1] + m[2][2] + m[2][3]);
 		return Vector3f();
 	}
 
@@ -438,9 +462,9 @@ public:
 	Vector3f ExtractScale()	const
 	{
 		Vector3f result(
-		m[0][0] + m[0][1] + m[0][2],
-		m[1][0] + m[1][1] + m[1][2],
-		m[2][0] + m[2][1] + m[2][2]);
+			m[0][0] + m[0][1] + m[0][2],
+			m[1][0] + m[1][1] + m[1][2],
+			m[2][0] + m[2][1] + m[2][2]);
 		return result;
 	}
 
@@ -486,9 +510,26 @@ public:
 		return q;
 	}
 
-	float ExtractRotationX() const;
-	float ExtractRotationY() const;
-	float ExtractRotationZ() const;
+	float ExtractRotationX() const
+	{
+		Quaternion rot = ExtractRotation();
+
+		return rot.EulerAngles().x;
+	}
+
+	float ExtractRotationY() const
+	{
+		Quaternion rot = ExtractRotation();
+
+		return rot.EulerAngles().y;
+	}
+
+	float ExtractRotationZ() const
+	{
+		Quaternion rot = ExtractRotation();
+
+		return rot.EulerAngles().z;
+	}
 
 	std::string to_string()const
 	{

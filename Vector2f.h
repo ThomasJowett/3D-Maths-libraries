@@ -8,8 +8,13 @@
 class Vector2f
 {
 public:
-	float x;
-	float y;
+	union
+	{
+		struct {
+			float x;
+			float y;
+		};
+	};
 
 	//Constructors ----------------------------------------------------------------------------------
 	Vector2f()
@@ -18,9 +23,11 @@ public:
 		y = 0.0f;
 	}
 
-	Vector2f(float x, float y) :x(x), y(y) {}
+	Vector2f(const float x, const float y) :x(x), y(y) {}
 
-	Vector2f(Vector3f vector3d) :x(vector3d.x), y(vector3d.y) {}
+	Vector2f(const Vector2f& vector2) :x(vector2.x), y(vector2.y) {}
+	
+	Vector2f(const Vector3f& vector3) :x(vector3.x), y(vector3.y) {}
 
 	//Destructor---------------------------------------------------------------------------------------
 	~Vector2f() = default;
@@ -36,14 +43,14 @@ public:
 	//Square length of the vector
 	float const SqrMagnitude()
 	{
-		return ((x*x) + (y*y));
+		return ((x * x) + (y * y));
 	}
 
 	//Gets a vector of same direction with magnitude of 1
 	Vector2f const GetNormalized()
 	{
 		float magnitude = Magnitude();
-		if(magnitude > 0.0f)
+		if (magnitude > 0.0f)
 			return Vector2f(x / magnitude, y / magnitude);
 		return Vector2f();
 	}
@@ -56,14 +63,21 @@ public:
 		y = normalized.y;
 	}
 
-	//clamp v to given length
+	//clamp this vector to given length
 	void Clamp(const float length)
 	{
-		if (SqrMagnitude() > length*length)
+		if (SqrMagnitude() > length * length)
 		{
 			Normalize();
 			*this = *this * length;
 		}
+	}
+
+	//set x and y to zero
+	void Zero()
+	{
+		x = 0.0f;
+		y = 0.0f;
 	}
 
 	//Returns Perpendicular either clockwise or anti-clockwise
@@ -81,7 +95,7 @@ public:
 		return "x: " + std::to_string(x) + " y: " + std::to_string(y);
 	}
 
-	Vector3f to_Vector3D()
+	Vector3f to_Vector3D() const
 	{
 		return Vector3f(x, y, 0);
 	}
@@ -114,7 +128,7 @@ public:
 	//returns the sum of the products of v1 and v2
 	static float Dot(Vector2f v1, Vector2f v2)
 	{
-		return v1.x*v2.x + v1.y*v2.y;
+		return v1.x * v2.x + v1.y * v2.y;
 	}
 
 	// 2D vector cross product analog.
@@ -144,7 +158,7 @@ public:
 	static Vector2f Reflect(Vector2f v, Vector2f normal)
 	{
 		Vector2f n = normal.GetNormalized();
-		return v - (n*(2.0f * Dot(v, n)));
+		return v - (n * (2.0f * Dot(v, n)));
 	}
 
 	// return projection v1 on to v2
@@ -166,14 +180,14 @@ public:
 	//returns if v1 is close to v2
 	static bool Near(Vector2f v1, Vector2f v2, float distance)
 	{
-		return SqrDistance(v1, v2) < distance*distance;
+		return SqrDistance(v1, v2) < distance * distance;
 	}
 
 	//Operators--------------------------------------------------------------------------------------
 
 	Vector2f operator*(float scaler)
 	{
-		return Vector2f(x * scaler, y *scaler);
+		return Vector2f(x * scaler, y * scaler);
 	}
 
 	float operator*(Vector2f other)
@@ -242,6 +256,16 @@ public:
 	operator bool() const
 	{
 		return(IsValid());
+	}
+
+	const float& operator[](const int i) const
+	{
+		return i == 0 ? this->x : this->y;
+	}
+
+	float& operator[](const int i)
+	{
+		return i == 0 ? this->x : this->y;
 	}
 };
 

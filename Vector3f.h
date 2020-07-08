@@ -7,9 +7,14 @@
 class Vector3f
 {
 public:
-	float x;
-	float y;
-	float z;
+	union
+	{
+		struct {
+			float x;
+			float y;
+			float z;
+		};
+	};
 
 	//Constructors ----------------------------------------------------------------------------------
 	Vector3f()
@@ -19,7 +24,9 @@ public:
 		z = 0.0f;
 	}
 
-	Vector3f(float x, float y, float z) : x(x), y(y), z(z) {}
+	Vector3f(const float x, const float y, const float z) : x(x), y(y), z(z) {}
+
+	Vector3f(const Vector3f& vector3) :x(vector3.x), y(vector3.y), z(vector3.z) {}
 
 	//Destructor---------------------------------------------------------------------------------------
 	~Vector3f() = default;
@@ -35,7 +42,7 @@ public:
 	//Square length of the vector
 	float const SqrMagnitude()
 	{
-		return ((x*x) + (y*y) + (z*z));
+		return ((x * x) + (y * y) + (z * z));
 	}
 
 	//Gets a vector of same direction with magnitude of 1
@@ -55,6 +62,24 @@ public:
 		z = normalized.z;
 	}
 
+	//clamp this vector to given length
+	void Clamp(const float length)
+	{
+		if (SqrMagnitude() > length * length)
+		{
+			Normalize();
+			*this = *this * length;
+		}
+	}
+
+	//set x, y and z to zero
+	void Zero()
+	{
+		x = 0.0f;
+		y = 0.0f;
+		z = 0.0f;
+	}
+
 	//converts vector to a formatted string
 	std::string to_string()const
 	{
@@ -72,16 +97,16 @@ public:
 	static Vector3f Cross(Vector3f v1, Vector3f v2)
 	{
 		Vector3f cross;
-		cross.x = (v1.y*v2.z) - (v1.z*v2.y);
-		cross.y = -((v1.x*v2.z) - (v1.z*v2.x));
-		cross.z = (v1.x*v2.y) - (v1.y*v2.x);
+		cross.x = (v1.y * v2.z) - (v1.z * v2.y);
+		cross.y = -((v1.x * v2.z) - (v1.z * v2.x));
+		cross.z = (v1.x * v2.y) - (v1.y * v2.x);
 		return cross;
 	}
 
 	//returns the sum of the products of v1 and v2
 	static float Dot(Vector3f v1, Vector3f v2)
 	{
-		return (v1.x*v2.x + v1.y*v2.y + v1.z*v2.z);
+		return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
 	}
 
 	//distance between v1 and v2
@@ -136,13 +161,13 @@ public:
 	}
 
 	//adds the two vectors together
-	Vector3f operator+(const Vector3f & other)
+	Vector3f operator+(const Vector3f& other)
 	{
 		return Vector3f(x + other.x, y + other.y, z + other.z);
 	}
 
 	//subtracts v2 from v1
-	Vector3f operator-(const Vector3f & other)
+	Vector3f operator-(const Vector3f& other)
 	{
 		return Vector3f(x - other.x, y - other.y, z - other.z);
 	}
@@ -153,7 +178,7 @@ public:
 		return Vector3f(-x, -y, -z);
 	}
 
-	Vector3f operator+=(const Vector3f & other)
+	Vector3f operator+=(const Vector3f& other)
 	{
 		x += other.x;
 		y += other.y;
@@ -161,7 +186,7 @@ public:
 		return *this;
 	}
 
-	Vector3f operator-=(const Vector3f & other)
+	Vector3f operator-=(const Vector3f& other)
 	{
 		x -= other.x;
 		y -= other.y;
@@ -169,17 +194,17 @@ public:
 		return *this;
 	}
 
-	bool operator==(const Vector3f & other)
+	bool operator==(const Vector3f& other)
 	{
 		return (x == other.x && y == other.y && z == other.z);
 	}
 
-	bool operator!=(const Vector3f & other)
+	bool operator!=(const Vector3f& other)
 	{
 		return !(x == other.x && y == other.y && z == other.z);
 	}
 
-	Vector3f operator=(const Vector3f & other)
+	Vector3f operator=(const Vector3f& other)
 	{
 		x = other.x;
 		y = other.y;
@@ -190,6 +215,16 @@ public:
 	operator bool() const
 	{
 		return(IsValid());
+	}
+
+	const float& operator[](const int i) const
+	{
+		return i == 0 ? this->x : (i == 1 ? this->y : this->z);
+	}
+
+	float& operator[](const int i)
+	{
+		return i == 0 ? this->x : (i == 1 ? this->y : this->z);
 	}
 };
 
@@ -206,7 +241,7 @@ inline Vector3f operator/(float scaler, const Vector3f& v)
 }
 
 //adds the two vectors together
-inline Vector3f operator+(const Vector3f & v1, const Vector3f & v2)
+inline Vector3f operator+(const Vector3f& v1, const Vector3f& v2)
 {
 	return Vector3f(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
 }
