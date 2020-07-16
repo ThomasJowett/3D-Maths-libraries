@@ -126,7 +126,7 @@ public:
 	{
 		Matrix4x4 result;
 		result.m[0][0] = cos(angle);
-		result.m[2][0] = sin(angle);
+		result.m[0][2] = sin(angle);
 		result.m[2][0] = -sin(angle);
 		result.m[2][2] = cos(angle);
 		return result;
