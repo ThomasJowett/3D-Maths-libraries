@@ -176,11 +176,12 @@ public:
 	//rotates a vector by this quaternion
 	Vector3f RotateVectorByQuaternion(Vector3f& vector)
 	{
-		Quaternion V(0, vector.x, vector.y, vector.z);
-		V = (*this * V * this->Conjugate());
-		vector.x = V.i;
-		vector.z = V.j;
-		vector.z = V.k;
+		Vector3f u(i, j, k);
+
+		vector = 2.0f * Vector3f::Dot(u, vector) * u
+			+ (r * r - Vector3f::Dot(u, u)) * vector
+			+ 2.0f * r * Vector3f::Cross(u, vector);
+
 		return vector;
 	}
 
@@ -337,6 +338,14 @@ public:
 inline std::ostream& operator<<(std::ostream& os, Quaternion& q)
 {
 	return os << q.to_string();
+}
+
+inline Quaternion operator*(const Vector3f& multiplier, const Quaternion& q)
+{
+	Quaternion returnVal(q);
+	returnVal.RotateByVector(multiplier);
+
+	return returnVal;
 }
 
 #endif // !_QUATERNION_H
