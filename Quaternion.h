@@ -333,6 +333,11 @@ public:
 		Vector3f V = multiplier;
 		return RotateVectorByQuaternion(V);
 	}
+
+	float& operator[](const int i)
+	{
+		return i == 0 ? this->r : (i == 1 ? this->i : (i == 2 ? this->j : this->k));
+	}
 };
 
 inline std::ostream& operator<<(std::ostream& os, Quaternion& q)
