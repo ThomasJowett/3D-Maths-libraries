@@ -113,7 +113,7 @@ public:
 			return false;
 		}
 
-		intersectionLine.d = Vector3f::Normalize(intersectionLine.d);
+		intersectionLine.d.Normalize();
 
 		return false;
 	}
