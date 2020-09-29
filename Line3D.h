@@ -1,5 +1,7 @@
+#ifndef _LINE3D_H
+#define _LINE3D_H
+
 #include "Vector3f.h"
-#include "Plane.h"
 
 class Line3D
 {
@@ -41,3 +43,5 @@ public:
 		archive(cereal::make_nvp("Distance", d));
 	}
 };
+
+#endif// !_LINE3D_H
