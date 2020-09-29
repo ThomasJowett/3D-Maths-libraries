@@ -267,6 +267,13 @@ public:
 	{
 		return i == 0 ? this->x : this->y;
 	}
+
+	template<typename Archive>
+	void serialize(Archive& archive)
+	{
+		archive(cereal::make_nvp("x", x));
+		archive(cereal::make_nvp("y", y));
+	}
 };
 
 inline Vector2f operator*(float scaler, const Vector2f& v)

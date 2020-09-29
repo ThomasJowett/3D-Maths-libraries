@@ -98,6 +98,15 @@ public:
 	{
 		return false;
 	}
+
+	template<typename Archive>
+	void serialize(Archive& archive)
+	{
+		archive(cereal::make_nvp("a", a));
+		archive(cereal::make_nvp("b", b));
+		archive(cereal::make_nvp("c", c));
+		archive(cereal::make_nvp("d", d));
+	}
 };
 
 inline std::ostream& operator<<(std::ostream& os, Plane& p)

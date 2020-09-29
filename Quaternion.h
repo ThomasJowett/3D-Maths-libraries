@@ -6,6 +6,7 @@
 #include <string>
 
 #define PI			3.14159265358979323846
+#define PIDIV2		1.57079632679489661923
 
 class Quaternion
 {
@@ -17,6 +18,13 @@ public:
 			float i;	//First Complex
 			float j;	//Second Complex
 			float k;	//Thrid Complex
+		};
+
+		struct {
+			float w;	//Real
+			float x;	//First Complex
+			float y;	//Second Complex
+			float z;	//Thrid Complex
 		};
 	};
 
@@ -133,7 +141,7 @@ public:
 		//Pitch
 		float sinp = 2 * (r * j - k * i);
 		if (std::abs(sinp) >= 1)
-			euler.y = std::copysign(PI / 2, sinp);
+			euler.y = std::copysign(PIDIV2, sinp);
 		else
 			euler.y = std::asin(sinp);
 
@@ -337,6 +345,15 @@ public:
 	float& operator[](const int i)
 	{
 		return i == 0 ? this->r : (i == 1 ? this->i : (i == 2 ? this->j : this->k));
+	}
+
+	template<typename Archive>
+	void serialize(Archive& archive)
+	{
+		archive(cereal::make_nvp("Real", r));
+		archive(cereal::make_nvp("First Complex", i));
+		archive(cereal::make_nvp("Second Complex", j));
+		archive(cereal::make_nvp("Third Complex", k));
 	}
 };
 

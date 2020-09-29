@@ -1,11 +1,15 @@
 #ifndef _MATRIX_H
 #define _MATRIX_H
 
+#include <string>
+
 #include "Vector3f.h"
 #include "Vector2f.h"
 #include "Plane.h"
 #include "Quaternion.h"
-#include <string>
+
+#define DegToRad(degrees) (degrees * (PI/180.0))
+#define RadToDeg(radians) (radians * (180.0/PI))
 
 class Matrix4x4
 {
@@ -559,6 +563,12 @@ public:
 	float const operator()(size_t row, size_t column)const
 	{
 		return m[row][column];
+	}
+
+	template<typename Archive>
+	void serialize(Archive& archive)
+	{
+		archive(cereal::make_nvp("Matrix", m));
 	}
 };
 

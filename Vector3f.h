@@ -225,6 +225,14 @@ public:
 	float& operator[](const int i)
 	{
 		return i == 0 ? this->x : (i == 1 ? this->y : this->z);
+	}	
+	
+	template<typename Archive>
+		void serialize(Archive& archive)
+	{
+		archive(cereal::make_nvp("x", x));
+		archive(cereal::make_nvp("y", y));
+		archive(cereal::make_nvp("z", z));
 	}
 };
 

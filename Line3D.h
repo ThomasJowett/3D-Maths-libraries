@@ -33,4 +33,11 @@ public:
 		float dot = Vector3f::Dot(L2.p - L1.p, cross);
 		return (dot * dot) / cross.SqrMagnitude();
 	}
+
+	template<typename Archive>
+	void serialize(Archive& archive)
+	{
+		archive(cereal::make_nvp("Point", p));
+		archive(cereal::make_nvp("Distance", d));
+	}
 };
