@@ -271,8 +271,7 @@ public:
 	template<typename Archive>
 	void serialize(Archive& archive)
 	{
-		archive(cereal::make_nvp("x", x));
-		archive(cereal::make_nvp("y", y));
+		archive(x, y);
 	}
 };
 

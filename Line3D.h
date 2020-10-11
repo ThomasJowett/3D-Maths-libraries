@@ -39,8 +39,7 @@ public:
 	template<typename Archive>
 	void serialize(Archive& archive)
 	{
-		archive(cereal::make_nvp("Point", p));
-		archive(cereal::make_nvp("Distance", d));
+		archive(p,d);
 	}
 };
 

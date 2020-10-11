@@ -568,7 +568,7 @@ public:
 	template<typename Archive>
 	void serialize(Archive& archive)
 	{
-		archive(cereal::make_nvp("Matrix", m));
+		archive(m);
 	}
 };
 

@@ -141,7 +141,7 @@ public:
 		//Pitch
 		float sinp = 2 * (r * j - k * i);
 		if (std::abs(sinp) >= 1)
-			euler.y = std::copysign(PIDIV2, sinp);
+			euler.y = std::copysign((float)PIDIV2, sinp);
 		else
 			euler.y = std::asin(sinp);
 
@@ -350,10 +350,7 @@ public:
 	template<typename Archive>
 	void serialize(Archive& archive)
 	{
-		archive(cereal::make_nvp("Real", r));
-		archive(cereal::make_nvp("First Complex", i));
-		archive(cereal::make_nvp("Second Complex", j));
-		archive(cereal::make_nvp("Third Complex", k));
+		archive(r, i, j, k);
 	}
 };
 
