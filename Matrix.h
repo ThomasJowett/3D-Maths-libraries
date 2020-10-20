@@ -323,6 +323,11 @@ public:
 		return result;
 	}
 
+	static Matrix4x4 Compose(Vector3f position, Vector3f rotation, Vector3f scale)
+	{
+		return Matrix4x4::Translate(position) * Matrix4x4::Rotate({ rotation }) * Matrix4x4::Scale(scale);
+	}
+
 	static float Determinant(const Matrix4x4& matrix)
 	{
 		return
