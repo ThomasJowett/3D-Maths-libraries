@@ -137,7 +137,10 @@ public:
 		Vector3f relativeVec = v2 - v1 * dot;
 		relativeVec.Normalize();
 
-		return ((v1 * cos(theta)) + (relativeVec * sin(theta)));
+		float cosTheta = cos(theta);
+		float sinTheta = sin(theta);
+
+		return ((v1 * cosTheta) + (relativeVec * sinTheta));
 	}
 
 	//Operators-----------------------------------------------------------------------------------------
