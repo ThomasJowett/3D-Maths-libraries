@@ -563,7 +563,7 @@ public:
 		(*this) = GetTranspose();
 	}
 
-	Matrix4x4 GetTranspose()
+	Matrix4x4 GetTranspose() const
 	{
 		Matrix4x4 result;
 		for (int l = 0; l < 4; l++)
