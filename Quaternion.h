@@ -17,14 +17,14 @@ public:
 			float r;	//Real
 			float i;	//First Complex
 			float j;	//Second Complex
-			float k;	//Thrid Complex
+			float k;	//Third Complex
 		};
 
 		struct {
 			float w;	//Real
 			float x;	//First Complex
 			float y;	//Second Complex
-			float z;	//Thrid Complex
+			float z;	//Third Complex
 		};
 	};
 
