@@ -475,7 +475,28 @@ public:
 			m[0][0] + m[0][1] + m[0][2] + m[0][3],
 			m[1][0] + m[1][1] + m[1][2] + m[1][3],
 			m[2][0] + m[2][1] + m[2][2] + m[2][3]);
-		return Vector3f();
+		return result;
+	}
+
+	void OrthoNormalize()
+	{
+		Vector3f right(m[0][0], m[1][0], m[2][0]);
+		right.Normalize();
+		m[0][0] = right.x;
+		m[1][0] = right.y;
+		m[2][0] = right.z;
+
+		Vector3f up(m[0][1], m[1][1], m[2][1]);
+		up.Normalize();
+		m[0][1] = up.x;
+		m[1][1] = up.y;
+		m[2][1] = up.z;
+
+		Vector3f dir(m[0][2], m[1][2], m[2][2]);
+		dir.Normalize();
+		m[0][2] = dir.x;
+		m[1][2] = dir.y;
+		m[2][2] = dir.z;
 	}
 
 	Vector3f ExtractTranslation() const
@@ -556,6 +577,25 @@ public:
 		Quaternion rot = ExtractRotation();
 
 		return rot.EulerAngles().z;
+	}
+
+	void Decompose(Vector3f& translation, Vector3f& rotation, Vector3f& scale) const
+	{
+		Matrix4x4 mat = GetTranspose();
+
+		scale[0] = Vector3f(mat[0][0], mat[0][1], mat[0][2]).Magnitude();
+		scale[1] = Vector3f(mat[1][0], mat[1][1], mat[1][2]).Magnitude();
+		scale[2] = Vector3f(mat[2][0], mat[2][1], mat[2][2]).Magnitude();
+
+		mat.OrthoNormalize();
+
+		rotation[0] = atan2f(mat.m[1][2], mat.m[2][2]);
+		rotation[1] = atan2f(-mat.m[0][2], sqrtf(mat.m[1][2] * mat.m[1][2] + mat.m[2][2] * mat.m[2][2]));
+		rotation[2] = atan2f(mat.m[0][1], mat.m[0][0]);
+
+		translation[0] = mat[3][0];
+		translation[1] = mat[3][1];
+		translation[2] = mat[3][2];
 	}
 
 	void Transpose()
