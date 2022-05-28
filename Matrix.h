@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "Vector4f.h"
 #include "Vector3f.h"
 #include "Vector2f.h"
 #include "Plane.h"
@@ -461,6 +462,16 @@ public:
 		return result;
 	}
 
+	static Vector4f MulVec4(Matrix4x4 matrix, Vector4f vector)
+	{
+		Vector4f result(
+			(matrix(0, 0) * vector.x) + (matrix(0, 1) * vector.y) + (matrix(0, 2) * vector.z) + (matrix(0, 3)),
+			(matrix(1, 0) * vector.x) + (matrix(1, 1) * vector.y) + (matrix(1, 2) * vector.z) + (matrix(1, 3)),
+			(matrix(2, 0) * vector.x) + (matrix(2, 1) * vector.y) + (matrix(2, 2) * vector.z) + (matrix(2, 3)),
+			(matrix(3, 0) * vector.x) + (matrix(3, 1) * vector.y) + (matrix(3, 2) * vector.z) + (matrix(3, 3)));
+		return result;
+	}
+
 	Vector2f ToVector2f() const
 	{
 		Vector2f result(
@@ -705,6 +716,10 @@ inline Vector2f operator*(const Matrix4x4& m, const Vector2f& v)
 inline Vector3f operator*(const Matrix4x4& m, const Vector3f& v)
 {
 	return Matrix4x4::MulVec3(m, v);
+}
+inline Vector4f operator*(const Matrix4x4& m, const Vector4f& v)
+{
+	return Matrix4x4::MulVec4(m, v);
 }
 inline Matrix4x4 operator*(const Matrix4x4& m, const float& f)
 {
