@@ -6,10 +6,23 @@
 class Plane
 {
 public:
-	float a;	//Normal X
-	float b;	//Normal Y
-	float c;	//Normal Z
-	float d;	//Distance from origin
+	union 
+	{
+		struct
+		{
+			Vector3f normal;
+			float d;
+		};
+
+		struct
+		{
+			float a;	//Normal X
+			float b;	//Normal Y
+			float c;	//Normal Z
+			float d;	//Distance from origin
+		};
+	};
+
 
 	Plane()
 	{
@@ -64,7 +77,7 @@ public:
 
 	Vector3f ClosestPoint(const Vector3f& point)
 	{
-		return (point - Normal() * SignedDistance(point));
+		return (point - normal * SignedDistance(point));
 	}
 
 	void Normalize()
@@ -84,11 +97,6 @@ public:
 		d = -d;
 	}
 
-	Vector3f Normal()const
-	{
-		return Vector3f(a, b, c);
-	}
-
 	std::string to_string()
 	{
 		return "a: " + std::to_string(a) + " b: " + std::to_string(b) + " c: " + std::to_string(c) + " d: " + std::to_string(d);
@@ -106,7 +114,7 @@ public:
 
 		intersectionLine.p = Vector3f((p2.d * p1.b - p1.d * p2.b) / denominator, (p1.d * p2.a - p2.d * p1.a) / denominator, 0.0f);
 
-		intersectionLine.d = Vector3f::Cross(p1.Normal(), p2.Normal());
+		intersectionLine.d = Vector3f::Cross(p1.normal, p2.normal);
 
 		if (intersectionLine.d.Magnitude() == 0.0f)
 		{
@@ -116,6 +124,19 @@ public:
 		intersectionLine.d.Normalize();
 
 		return false;
+	}
+
+	static bool PlaneLineIntersection(const Plane& p, const Line3D& line, const Vector3f& origin, Vector3f& intersectionPoint)
+	{
+		float dot = Vector3f::Dot(p.normal, origin);
+
+		if (Vector3f::Dot(p.normal, line.d) == 0.0f)
+		{
+			return false; //No intersection, the line is parallel to the plane
+		}
+		float x = (dot - Vector3f::Dot(p.normal, line.p)) / Vector3f::Dot(p.normal, line.d);
+		intersectionPoint = line.p + line.d.GetNormalized() * x;
+		return true;
 	}
 
 	template<typename Archive>

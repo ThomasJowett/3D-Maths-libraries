@@ -34,19 +34,19 @@ public:
 	//Member Functions --------------------------------------------------------------------------------
 
 	//Length of the vector
-	float const Magnitude()
+	float Magnitude() const
 	{
 		return sqrt(SqrMagnitude());
 	}
 
 	//Square length of the vector
-	float const SqrMagnitude()
+	float SqrMagnitude() const
 	{
 		return ((x * x) + (y * y) + (z * z));
 	}
 
 	//Gets a vector of same direction with magnitude of 1
-	Vector3f const GetNormalized()
+	Vector3f GetNormalized() const
 	{
 		float magnitude = Magnitude();
 		return Vector3f(x / magnitude, y / magnitude, z / magnitude);
@@ -81,7 +81,7 @@ public:
 	}
 
 	//converts vector to a formatted string
-	std::string to_string()const
+	std::string to_string() const
 	{
 		return "x: " + std::to_string(x) + " y: " + std::to_string(y) + " z: " + std::to_string(z);
 	}

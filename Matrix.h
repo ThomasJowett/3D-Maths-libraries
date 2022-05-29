@@ -713,11 +713,23 @@ inline Vector2f operator*(const Matrix4x4& m, const Vector2f& v)
 {
 	return Matrix4x4::MulVec2(m, v);
 }
+inline Vector2f operator*(const Vector2f& v, const Matrix4x4& m)
+{
+	return Matrix4x4::MulVec2(m, v);
+}
 inline Vector3f operator*(const Matrix4x4& m, const Vector3f& v)
 {
 	return Matrix4x4::MulVec3(m, v);
 }
+inline Vector3f operator*(const Vector3f& v, const Matrix4x4& m)
+{
+	return Matrix4x4::MulVec3(m, v);
+}
 inline Vector4f operator*(const Matrix4x4& m, const Vector4f& v)
+{
+	return Matrix4x4::MulVec4(m, v);
+}
+inline Vector4f operator*(const Vector4f& v, const Matrix4x4& m)
 {
 	return Matrix4x4::MulVec4(m, v);
 }
