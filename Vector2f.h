@@ -58,9 +58,7 @@ public:
 	//set this vectors length to 1
 	void Normalize()
 	{
-		Vector2f normalized = GetNormalized();
-		x = normalized.x;
-		y = normalized.y;
+		*this = GetNormalized();
 	}
 
 	//clamp this vector to given length

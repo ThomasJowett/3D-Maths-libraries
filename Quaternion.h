@@ -104,7 +104,7 @@ public:
 	}
 
 	//return this quaternion normalized
-	Quaternion Normalized() const
+	Quaternion GetNormalized() const
 	{
 		Quaternion quaternion = *this;
 		quaternion.Normalize();
@@ -365,6 +365,16 @@ inline Quaternion operator*(const Vector3f& multiplier, const Quaternion& q)
 	returnVal.RotateByVector(multiplier);
 
 	return returnVal;
+}
+
+inline Quaternion operator+(const Quaternion& a, const Quaternion& b)
+{
+	return a + b;
+}
+
+inline Quaternion operator-(const Quaternion& a, const Quaternion& b)
+{
+	return a - b;
 }
 
 #endif // !_QUATERNION_H
