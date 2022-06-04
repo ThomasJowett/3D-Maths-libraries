@@ -369,12 +369,12 @@ inline Quaternion operator*(const Vector3f& multiplier, const Quaternion& q)
 
 inline Quaternion operator+(const Quaternion& a, const Quaternion& b)
 {
-	return a + b;
+	return Quaternion(a.r + b.r, a.i + b.i, a.j + b.j, a.k + b.k);
 }
 
 inline Quaternion operator-(const Quaternion& a, const Quaternion& b)
 {
-	return a - b;
+	return Quaternion(a.r - b.r, a.i - b.i, a.j - b.j, a.k - b.k);
 }
 
 #endif // !_QUATERNION_H
