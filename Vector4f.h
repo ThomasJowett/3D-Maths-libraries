@@ -44,6 +44,11 @@ public:
 		return ((x * x) + (y * y) + (z * z) + (w * w));
 	}
 
+	void Normalize()
+	{
+		(*this) *= (1.0f / Magnitude() > FLT_EPSILON ? Magnitude() : FLT_EPSILON);
+	}
+
 	//converts vector to a formatted string
 	std::string to_string()const
 	{
