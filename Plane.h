@@ -12,7 +12,7 @@ public:
 		{
 			Vector3f normal;
 			float d;
-		};
+		}nd;
 
 		struct
 		{
@@ -77,7 +77,7 @@ public:
 
 	Vector3f ClosestPoint(const Vector3f& point)
 	{
-		return (point - normal * SignedDistance(point));
+		return (point - nd.normal * SignedDistance(point));
 	}
 
 	void Normalize()
@@ -114,7 +114,7 @@ public:
 
 		intersectionLine.p = Vector3f((p2.d * p1.b - p1.d * p2.b) / denominator, (p1.d * p2.a - p2.d * p1.a) / denominator, 0.0f);
 
-		intersectionLine.d = Vector3f::Cross(p1.normal, p2.normal);
+		intersectionLine.d = Vector3f::Cross(p1.nd.normal, p2.nd.normal);
 
 		if (intersectionLine.d.Magnitude() == 0.0f)
 		{
@@ -128,13 +128,13 @@ public:
 
 	static bool PlaneLineIntersection(const Plane& p, const Line3D& line, const Vector3f& origin, Vector3f& intersectionPoint)
 	{
-		float dot = Vector3f::Dot(p.normal, origin);
+		float dot = Vector3f::Dot(p.nd.normal, origin);
 
-		if (Vector3f::Dot(p.normal, line.d) == 0.0f)
+		if (Vector3f::Dot(p.nd.normal, line.d) == 0.0f)
 		{
 			return false; //No intersection, the line is parallel to the plane
 		}
-		float x = (dot - Vector3f::Dot(p.normal, line.p)) / Vector3f::Dot(p.normal, line.d);
+		float x = (dot - Vector3f::Dot(p.nd.normal, line.p)) / Vector3f::Dot(p.nd.normal, line.d);
 		intersectionPoint = line.p + line.d.GetNormalized() * x;
 		return true;
 	}

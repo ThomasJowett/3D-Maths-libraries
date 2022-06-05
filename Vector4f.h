@@ -3,6 +3,8 @@
 
 #include "Vector3f.h"
 
+#include <float.h>
+
 class Vector4f
 {
 public:
