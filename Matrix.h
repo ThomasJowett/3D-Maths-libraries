@@ -74,7 +74,6 @@ public:
 
 	Matrix4x4(const Matrix4x4& matrix)
 	{
-
 		m[0][0] = matrix(0, 0);
 		m[0][1] = matrix(0, 1);
 		m[0][2] = matrix(0, 2);
@@ -377,7 +376,7 @@ public:
 			m(0, 2) * m(1, 1) * m(3, 0) - m(0, 1) * m(1, 2) * m(3, 0) - m(0, 2) * m(1, 0) * m(3, 1) + m(0, 0) * m(1, 2) * m(3, 1) + m(0, 1) * m(1, 0) * m(3, 2) - m(0, 0) * m(1, 1) * m(3, 2),
 			m(0, 1) * m(1, 2) * m(2, 0) - m(0, 2) * m(1, 1) * m(2, 0) + m(0, 2) * m(1, 0) * m(2, 1) - m(0, 0) * m(1, 2) * m(2, 1) - m(0, 1) * m(1, 0) * m(2, 2) + m(0, 0) * m(1, 1) * m(2, 2));
 
-		return MulFloat(result, Matrix4x4::Determinant(m));
+		return MulFloat(result, 1 / Matrix4x4::Determinant(m));
 	}
 
 	static void FrustumPlanes(Plane planes[6], const Matrix4x4& matrix)
@@ -635,7 +634,6 @@ public:
 		{
 			for (unsigned int j = 0; j < 4; j++)
 			{
-
 				result += std::to_string(m[i][j]);
 				if (j != 3)
 				{

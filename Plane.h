@@ -6,7 +6,7 @@
 class Plane
 {
 public:
-	union 
+	union
 	{
 		struct
 		{
@@ -22,7 +22,6 @@ public:
 			float d;	//Distance from origin
 		};
 	};
-
 
 	Plane()
 	{
@@ -151,5 +150,3 @@ inline std::ostream& operator<<(std::ostream& os, Plane& p)
 	return os << p.to_string();
 }
 #endif // !_PLANE_H
-
-
