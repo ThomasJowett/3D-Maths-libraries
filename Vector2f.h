@@ -183,32 +183,32 @@ public:
 
 	//Operators--------------------------------------------------------------------------------------
 
-	Vector2f operator*(float scaler)
+	Vector2f operator*(float scaler) const
 	{
 		return Vector2f(x * scaler, y * scaler);
 	}
 
-	float operator*(Vector2f other)
+	float operator*(Vector2f other) const
 	{
 		return Dot(*this, other);
 	}
 
-	Vector2f operator/(float scaler)
+	Vector2f operator/(float scaler) const
 	{
 		return Vector2f(x / scaler, y / scaler);
 	}
 
-	Vector2f operator+(const Vector2f& other)
+	Vector2f operator+(const Vector2f& other) const
 	{
 		return Vector2f(x + other.x, y + other.y);
 	}
 
-	Vector2f operator-(const Vector2f& other)
+	Vector2f operator-(const Vector2f& other) const
 	{
 		return Vector2f(x - other.x, y - other.y);
 	}
 
-	Vector2f operator-(void)const
+	Vector2f operator-(void) const
 	{
 		return Vector2f(-x, -y);
 	}
@@ -227,12 +227,12 @@ public:
 		return *this;
 	}
 
-	bool operator==(const Vector2f& other)
+	bool operator==(const Vector2f& other) const
 	{
 		return (x == other.x && y == other.y);
 	}
 
-	bool operator!=(const Vector2f& other)
+	bool operator!=(const Vector2f& other) const
 	{
 		return !(x == other.x && y == other.y);
 	}
@@ -281,16 +281,6 @@ inline Vector2f operator*(float scaler, const Vector2f& v)
 inline Vector2f operator/(float scaler, const Vector2f& v)
 {
 	return Vector2f(scaler / v.x, scaler / v.y);
-}
-
-inline Vector2f operator+(const Vector2f& v1, const Vector2f& v2)
-{
-	return Vector2f(v1.x + v2.x, v1.y + v2.y);
-}
-
-inline Vector2f operator-(const Vector2f& v1, const Vector2f& v2)
-{
-	return Vector2f(v1.x - v2.x, v1.y - v2.y);
 }
 
 inline std::ostream& operator<<(std::ostream& os, Vector2f& v)

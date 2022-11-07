@@ -93,7 +93,7 @@ public:
 
 	//Static-------------------------------------------------------------------------------------------
 
-	//returns a vector orthagonal to both v1 and v2
+	//returns a vector orthogonal to both v1 and v2
 	static Vector3f Cross(Vector3f v1, Vector3f v2)
 	{
 		Vector3f cross;
@@ -146,37 +146,37 @@ public:
 	//Operators-----------------------------------------------------------------------------------------
 
 	//multiples each component of the vector by the scaler
-	Vector3f operator*(float scaler)
+	Vector3f operator*(float scaler) const
 	{
 		return Vector3f(x * scaler, y * scaler, z * scaler);
 	}
 
 	// dot product
-	float operator*(const Vector3f other)
+	float operator*(const Vector3f other) const
 	{
 		return Dot(*this, other);
 	}
 
 	//divides each component of the vector by the scaler
-	Vector3f operator/(float scaler)
+	Vector3f operator/(float scaler) const
 	{
 		return Vector3f(x / scaler, y / scaler, z / scaler);
 	}
 
 	//adds the two vectors together
-	Vector3f operator+(const Vector3f& other)
+	Vector3f operator+(const Vector3f& other) const
 	{
 		return Vector3f(x + other.x, y + other.y, z + other.z);
 	}
 
 	//subtracts v2 from v1
-	Vector3f operator-(const Vector3f& other)
+	Vector3f operator-(const Vector3f& other) const
 	{
 		return Vector3f(x - other.x, y - other.y, z - other.z);
 	}
 
 	//the inverse of the vector
-	Vector3f operator-(void)const
+	Vector3f operator-(void) const
 	{
 		return Vector3f(-x, -y, -z);
 	}
@@ -197,12 +197,12 @@ public:
 		return *this;
 	}
 
-	bool operator==(const Vector3f& other)
+	bool operator==(const Vector3f& other) const
 	{
 		return (x == other.x && y == other.y && z == other.z);
 	}
 
-	bool operator!=(const Vector3f& other)
+	bool operator!=(const Vector3f& other) const
 	{
 		return !(x == other.x && y == other.y && z == other.z);
 	}
@@ -247,17 +247,6 @@ inline Vector3f operator*(float scaler, const Vector3f& v)
 inline Vector3f operator/(float scaler, const Vector3f& v)
 {
 	return Vector3f(scaler / v.x, scaler / v.y, scaler / v.z);
-}
-
-//adds the two vectors together
-inline Vector3f operator+(const Vector3f& v1, const Vector3f& v2)
-{
-	return Vector3f(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
-}
-
-inline Vector3f operator-(const Vector3f& v1, const Vector3f& v2)
-{
-	return Vector3f(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
 }
 
 inline std::ostream& operator<<(std::ostream& os, const Vector3f& v)
