@@ -89,32 +89,32 @@ public:
 
 	//Operators-----------------------------------------------------------------------------------------
 
-	Vector4f operator*(float scaler)
+	Vector4f operator*(float scaler) const
 	{
 		return Vector4f(x * scaler, y * scaler, z * scaler, w * scaler);
 	}
 
-	float operator*(const Vector4f other)
+	float operator*(const Vector4f other) const
 	{
 		return Dot(*this, other);
 	}
 
-	Vector4f operator/(float scaler)
+	Vector4f operator/(float scaler) const
 	{
 		return Vector4f(x / scaler, y / scaler, z / scaler, w / scaler);
 	}
 
-	Vector4f operator+(const Vector4f& other)
+	Vector4f operator+(const Vector4f& other) const
 	{
 		return Vector4f(x + other.x, y + other.y, z + other.z, w + other.w);
 	}
 
-	Vector4f operator-(const Vector4f& other)
+	Vector4f operator-(const Vector4f& other) const
 	{
 		return Vector4f(x - other.x, y - other.y, z - other.z, w - other.w);
 	}
 
-	Vector4f operator-(void)const
+	Vector4f operator-(void) const
 	{
 		return Vector4f(-x, -y, -z, -w);
 	}
@@ -155,12 +155,12 @@ public:
 		return *this;
 	}
 
-	bool operator==(const Vector4f& other)
+	bool operator==(const Vector4f& other) const
 	{
 		return (x == other.x && y == other.y && z == other.z && w == other.w);
 	}
 
-	bool operator!=(const Vector4f& other)
+	bool operator!=(const Vector4f& other) const
 	{
 		return !(x == other.x && y == other.y && z == other.z && w == other.w);
 	}
