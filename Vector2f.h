@@ -251,6 +251,12 @@ public:
 		return *this;
 	}
 
+	Vector2f& operator*=(const Vector2f& other)
+	{
+		x *= other.x, y *= other.y;
+		return *this;
+	}
+
 	operator bool() const
 	{
 		return(IsValid());

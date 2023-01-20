@@ -174,6 +174,12 @@ public:
 		return *this;
 	}
 
+	Vector4f& operator*=(const Vector4f& other)
+	{
+		x *= other.x, y *= other.y, z *= other.z, w *= other.w;
+		return *this;
+	}
+
 	const float& operator[](const int i) const
 	{
 		return i == 0 ? this->x : (i == 1 ? this->y : (i == 2 ? this->z : this->w));

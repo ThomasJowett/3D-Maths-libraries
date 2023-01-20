@@ -659,6 +659,13 @@ public:
 		return m[row];
 	}
 
+
+	Matrix4x4& operator*=(const Matrix4x4& rhs)
+	{
+		*this = rhs * *this;
+		return *this;
+	}
+
 	template <typename Archive>
 	void serialize(Archive& archive)
 	{
