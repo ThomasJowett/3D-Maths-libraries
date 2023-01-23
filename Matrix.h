@@ -659,13 +659,6 @@ public:
 		return m[row];
 	}
 
-
-	Matrix4x4& operator*=(const Matrix4x4& rhs)
-	{
-		*this = rhs * *this;
-		return *this;
-	}
-
 	template <typename Archive>
 	void serialize(Archive& archive)
 	{
@@ -741,6 +734,11 @@ inline Vector4f operator*(const Vector4f& v, const Matrix4x4& m)
 inline Matrix4x4 operator*(const Matrix4x4& m, const float& f)
 {
 	return Matrix4x4::MulFloat(m, f);
+}
+inline Matrix4x4& operator*=(Matrix4x4& lhs, const Matrix4x4& rhs)
+{
+	lhs = lhs * rhs;
+	return lhs;
 }
 inline std::ostream& operator<<(std::ostream& os, Matrix4x4& m)
 {
