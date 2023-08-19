@@ -51,6 +51,11 @@ public:
 		(*this) *= (1.0f / Magnitude() > FLT_EPSILON ? Magnitude() : FLT_EPSILON);
 	}
 
+	Vector3f xyz() const
+	{
+		return Vector3f(x, y, z);
+	}
+
 	//converts vector to a formatted string
 	std::string to_string()const
 	{
