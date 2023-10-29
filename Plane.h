@@ -66,7 +66,7 @@ public:
 
 	float UnsignedDistance(const Vector3f& point)const
 	{
-		return abs(a * point.x + b * point.y + c * point.z + d);
+		return std::abs(a * point.x + b * point.y + c * point.z + d);
 	}
 
 	float SignedDistance(const Vector3f& point)const

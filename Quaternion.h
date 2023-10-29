@@ -140,7 +140,7 @@ public:
 
 		//Pitch
 		float sinp = 2 * (r * j - k * i);
-		if (std::abs(sinp) >= 1)
+		if (std::abs(sinp) >= 1.0f)
 			euler.y = std::copysign((float)PIDIV2, sinp);
 		else
 			euler.y = std::asin(sinp);
@@ -225,7 +225,7 @@ public:
 		float cosHalfTheta = Dot(a, b);
 
 		//if a==b or a==-b then theta = 0 and we can return a
-		if (abs(cosHalfTheta) >= 1.0)
+		if (std::abs(cosHalfTheta) >= 1.0f)
 		{
 			result = a;
 			return result;
@@ -238,7 +238,7 @@ public:
 		//if theta = 180 degrees then result is not fully defined
 		//we could rotate around any axis normal to a or b
 
-		if (fabs(sinHalfTheta) < 0.001)
+		if (std::abs(sinHalfTheta) < 0.001f)
 		{
 			result.r = (a.r * 0.5f + b.r * 0.5f);
 			result.i = (a.i * 0.5f + b.i * 0.5f);
