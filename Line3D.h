@@ -26,7 +26,7 @@ public:
 	static float Distance(const Line3D &L1, const Line3D &L2)
 	{
 		Vector3f Cross = Vector3f::Cross(L1.d, L2.d);
-		return abs(Vector3f::Dot(L2.p - L1.p, Cross)) / Cross.Magnitude();
+		return std::abs(Vector3f::Dot(L2.p - L1.p, Cross)) / Cross.Magnitude();
 	}
 
 	static float SqrDistance(const Line3D &L1, const Line3D &L2)
