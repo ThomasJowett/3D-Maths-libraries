@@ -591,21 +591,39 @@ public:
 
 	void Decompose(Vector3f& translation, Vector3f& rotation, Vector3f& scale) const
 	{
-		Matrix4x4 mat = GetTranspose();
+		translation = ExtractTranslation();
 
-		scale[0] = Vector3f(mat[0][0], mat[0][1], mat[0][2]).Magnitude();
-		scale[1] = Vector3f(mat[1][0], mat[1][1], mat[1][2]).Magnitude();
-		scale[2] = Vector3f(mat[2][0], mat[2][1], mat[2][2]).Magnitude();
+		Vector3f basisX(m[0][0], m[1][0], m[2][0]);
+		Vector3f basisY(m[0][1], m[1][1], m[2][1]);
+		Vector3f basisZ(m[0][2], m[1][2], m[2][2]);
 
-		mat.OrthoNormalize();
+		// Extract Scale
+		scale.x = basisX.Magnitude();
+		scale.y = basisY.Magnitude();
+		scale.z = basisZ.Magnitude();
 
-		rotation[0] = atan2f(mat.m[1][2], mat.m[2][2]);
-		rotation[1] = atan2f(-mat.m[0][2], sqrtf(mat.m[1][2] * mat.m[1][2] + mat.m[2][2] * mat.m[2][2]));
-		rotation[2] = atan2f(mat.m[0][1], mat.m[0][0]);
+		if (scale.x != 0.0f)
+			basisX /= scale.x;
+		if (scale.y != 0.0f)
+			basisY /= scale.y;
+		if (scale.z != 0.0f)
+			basisZ /= scale.z;
 
-		translation[0] = mat[3][0];
-		translation[1] = mat[3][1];
-		translation[2] = mat[3][2];
+		Matrix4x4 rotMatrix;
+		rotMatrix.m[0][0] = basisX.x;
+		rotMatrix.m[0][1] = basisY.x;
+		rotMatrix.m[0][2] = basisZ.x;
+		rotMatrix.m[1][0] = basisX.y;
+		rotMatrix.m[1][1] = basisY.y;
+		rotMatrix.m[1][2] = basisZ.y;
+		rotMatrix.m[2][0] = basisX.z;
+		rotMatrix.m[2][1] = basisY.z;
+		rotMatrix.m[2][2] = basisZ.z;
+
+		Quaternion rotQuat = rotMatrix.ExtractRotation();
+
+		rotation = rotQuat.EulerAngles();
+		return;
 	}
 
 	void Transpose()

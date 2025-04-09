@@ -221,6 +221,24 @@ public:
 		return *this;
 	}
 
+	Vector3f& operator/=(const Vector3f& other)
+	{
+		x /= other.x, y /= other.y, z /= other.z;
+		return *this;
+	}
+
+	Vector3f& operator/=(const float& other)
+	{
+		x /= other, y /= other, z /= other;
+		return *this;
+	}
+
+	Vector3f& operator*=(const float& other)
+	{
+		x *= other, y *= other, z *= other;
+		return *this;
+	}
+
 	operator bool() const
 	{
 		return(IsValid());
