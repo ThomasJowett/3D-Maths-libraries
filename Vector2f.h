@@ -144,13 +144,20 @@ public:
 	}
 
 	//spherically interpolate between v1 and v2
-	//static Vector2f Slerp(Vector2f v1, Vector2f v2, float alpha)
-	//{
-	//	float theta = Angle(v1, v2);
-	//	return Rotated()
-	//	float dot = Dot(v1, v2);
-	//	float omega = acos(Clamp(dot, -1)
-	//}
+	static Vector2f Slerp(Vector2f v1, Vector2f v2, float alpha)
+	{
+		v1.Normalize();
+		v2.Normalize();
+
+		float dot = Dot(v1, v2);
+		if (dot < -1.0f) dot = -1.0f;
+		else if (dot > 1.0f) dot = 1.0f;
+
+		float theta = acos(dot) * alpha;
+
+		Vector2f relativeVec = v2 - (v1 * dot).GetNormalized();
+		return v1 * cos(theta) + relativeVec * sin(theta);
+	}
 
 	//returns a vector that is the reflection v against the normal
 	static Vector2f Reflect(Vector2f v, Vector2f normal)
