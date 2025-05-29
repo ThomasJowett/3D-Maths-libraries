@@ -156,7 +156,7 @@ public:
 		float theta = acos(dot) * alpha;
 
 		Vector2f relativeVec = v2 - (v1 * dot).GetNormalized();
-		return v1 * cos(theta) + relativeVec * sin(theta);
+		return (v1 * std::cos(theta)) + (relativeVec * std::sin(theta));
 	}
 
 	//returns a vector that is the reflection v against the normal
