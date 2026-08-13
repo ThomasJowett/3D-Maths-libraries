@@ -223,11 +223,11 @@ public:
 			0.0f,
 			0.0f,
 			farDepth / (nearDepth - farDepth),
-			-1.0f,
+			-(farDepth * nearDepth) / (farDepth - nearDepth),
 
 			0.0f,
 			0.0f,
-			-(farDepth * nearDepth) / (farDepth - nearDepth),
+			-1.0f,
 			0.0f);
 		return result;
 	}
