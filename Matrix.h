@@ -280,12 +280,12 @@ public:
 
 			0.0f,
 			0.0f,
-			-2.0f / (farDepth - nearDepth),
-			0.0f,
+			1.0f / (farDepth - nearDepth),
+			-nearDepth / (farDepth - nearDepth),
 
 			-((right + left) / (right - left)),
 			-((top + bottom) / (top - bottom)),
-			-(farDepth + nearDepth) / (farDepth - nearDepth),
+			0.0f,
 			1.0f);
 		return result;
 	}
