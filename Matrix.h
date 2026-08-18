@@ -280,8 +280,8 @@ public:
 
 			0.0f,
 			0.0f,
-			1.0f / (farDepth - nearDepth),
-			-nearDepth / (farDepth - nearDepth),
+			-1.0f / (farDepth - nearDepth),
+			farDepth / (farDepth - nearDepth),
 
 			-((right + left) / (right - left)),
 			-((top + bottom) / (top - bottom)),
