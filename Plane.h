@@ -33,6 +33,14 @@ public:
 	}
 
 	Plane(const Plane& p) :a(p.a), b(p.b), c(p.c), d(p.d) {}
+	Plane& operator=(const Plane& p)
+	{
+		a = p.a;
+		b = p.b;
+		c = p.c;
+		d = p.d;
+		return *this;
+	}
 	Plane(float a, float b, float c, float d) : a(a), b(b), c(c), d(d) {}
 	Plane(const Vector3f& normal, float distance)
 	{
@@ -82,6 +90,8 @@ public:
 	void Normalize()
 	{
 		float distance = sqrt(a * a + b * b + c * c);
+		if (distance == 0.0f)
+			return;
 		a = a / distance;
 		b = b / distance;
 		c = c / distance;
