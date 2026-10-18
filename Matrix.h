@@ -379,43 +379,24 @@ public:
 		return MulFloat(result, 1 / Matrix4x4::Determinant(m));
 	}
 
+	// Inward facing planes from projection * view for column vectors with [0,1] clip depth:
+	// left, right, bottom, top, near, far
 	static void FrustumPlanes(Plane planes[6], const Matrix4x4& matrix)
 	{
-		//left
-		planes[0].a = matrix(0, 3) + matrix(0, 0);
-		planes[0].b = matrix(1, 3) + matrix(1, 0);
-		planes[0].c = matrix(2, 3) + matrix(2, 0);
-		planes[0].d = matrix(3, 3) + matrix(3, 0);
+		auto rowPlane = [&matrix](size_t row, float sign) {
+			return Plane(
+				matrix(3, 0) + sign * matrix(row, 0),
+				matrix(3, 1) + sign * matrix(row, 1),
+				matrix(3, 2) + sign * matrix(row, 2),
+				matrix(3, 3) + sign * matrix(row, 3));
+		};
 
-		//right
-		planes[1].a = matrix(0, 3) - matrix(0, 0);
-		planes[1].b = matrix(1, 3) - matrix(1, 0);
-		planes[1].c = matrix(2, 3) - matrix(2, 0);
-		planes[1].d = matrix(3, 3) - matrix(3, 0);
-
-		//Bottom
-		planes[2].a = matrix(0, 3) + matrix(0, 1);
-		planes[2].b = matrix(1, 3) + matrix(1, 1);
-		planes[2].c = matrix(2, 3) + matrix(2, 1);
-		planes[2].d = matrix(3, 3) + matrix(3, 1);
-
-		//Top
-		planes[3].a = matrix(0, 3) - matrix(0, 1);
-		planes[3].b = matrix(1, 3) - matrix(1, 1);
-		planes[3].c = matrix(2, 3) - matrix(2, 1);
-		planes[3].d = matrix(3, 3) - matrix(3, 1);
-
-		//Near
-		planes[4].a = matrix(0, 2);
-		planes[4].b = matrix(1, 2);
-		planes[4].c = matrix(2, 2);
-		planes[4].d = matrix(3, 2);
-
-		//Far
-		planes[5].a = matrix(0, 3) - matrix(0, 2);
-		planes[5].b = matrix(1, 3) - matrix(1, 2);
-		planes[5].c = matrix(2, 3) - matrix(2, 2);
-		planes[5].d = matrix(3, 3) - matrix(3, 2);
+		planes[0] = rowPlane(0, 1.0f);
+		planes[1] = rowPlane(0, -1.0f);
+		planes[2] = rowPlane(1, 1.0f);
+		planes[3] = rowPlane(1, -1.0f);
+		planes[4] = Plane(matrix(2, 0), matrix(2, 1), matrix(2, 2), matrix(2, 3));
+		planes[5] = rowPlane(2, -1.0f);
 
 		for (int i = 0; i < 6; ++i)
 		{
