@@ -183,7 +183,7 @@ public:
 	static Matrix4x4 Frustum(const float& bottom, const float& top, const float& left, const float& right, const float& nearDepth, const float& farDepth)
 	{
 		Matrix4x4 result(
-			2.0f * nearDepth / (right - 1),
+			2.0f * nearDepth / (right - left),
 			0.0f,
 			0.0f,
 			0.0f,
@@ -495,12 +495,13 @@ public:
 		return Vector3f(m[0][3], m[1][3], m[2][3]);
 	}
 
+	// Length of each basis column
 	Vector3f ExtractScale() const
 	{
 		Vector3f result(
-			Vector3f(m[0][0], m[0][1], m[0][2]).Magnitude(),
-			Vector3f(m[1][0], m[1][1], m[1][2]).Magnitude(),
-			Vector3f(m[2][0], m[2][1], m[2][2]).Magnitude());
+			Vector3f(m[0][0], m[1][0], m[2][0]).Magnitude(),
+			Vector3f(m[0][1], m[1][1], m[2][1]).Magnitude(),
+			Vector3f(m[0][2], m[1][2], m[2][2]).Magnitude());
 		return result;
 	}
 
