@@ -591,6 +591,13 @@ public:
 		if (scale.z != 0.0f)
 			basisZ /= scale.z;
 
+		// A mirrored basis goes into a negative X scale, leaving a rotation
+		if (Vector3f::Dot(Vector3f::Cross(basisX, basisY), basisZ) < 0.0f)
+		{
+			scale.x = -scale.x;
+			basisX = -basisX;
+		}
+
 		Matrix4x4 rotMatrix;
 		rotMatrix.m[0][0] = basisX.x;
 		rotMatrix.m[0][1] = basisY.x;
