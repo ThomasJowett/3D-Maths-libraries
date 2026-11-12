@@ -140,7 +140,7 @@ public:
 	//linearly interpolate between v1 and v2
 	static Vector2f Lerp(Vector2f v1, Vector2f v2, float alpha)
 	{
-		return (v1 * alpha) + (v2 * (1 - alpha));
+		return (v1 * (1 - alpha)) + (v2 * alpha);
 	}
 
 	//spherically interpolate between v1 and v2

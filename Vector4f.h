@@ -69,7 +69,7 @@ public:
 
 	static Vector4f Lerp(Vector4f v1, Vector4f v2, float alpha)
 	{
-		return (v1 * alpha) + (v2 * (1 - alpha));
+		return (v1 * (1 - alpha)) + (v2 * alpha);
 	}
 
 	static float Dot(const Vector4f& v1, const Vector4f& v2)
