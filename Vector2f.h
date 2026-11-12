@@ -108,7 +108,11 @@ public:
 	//the unsigned angle between v1 and v2
 	static float Angle(Vector2f v1, Vector2f v2)
 	{
-		return acos(Dot(v1, v2));
+		float lengths = v1.Magnitude() * v2.Magnitude();
+		if (lengths == 0.0f)
+			return 0.0f;
+		float cosine = Dot(v1, v2) / lengths;
+		return acos(cosine < -1.0f ? -1.0f : (cosine > 1.0f ? 1.0f : cosine));
 	}
 
 	//distance between v1 and v2
