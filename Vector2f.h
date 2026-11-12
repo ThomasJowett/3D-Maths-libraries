@@ -159,7 +159,10 @@ public:
 
 		float theta = acos(dot) * alpha;
 
-		Vector2f relativeVec = v2 - (v1 * dot).GetNormalized();
+		Vector2f relativeVec = (v2 - (v1 * dot)).GetNormalized();
+		// Opposite vectors: turn through the perpendicular
+		if (relativeVec.SqrMagnitude() == 0.0f)
+			relativeVec = Vector2f(-v1.y, v1.x);
 		return (v1 * std::cos(theta)) + (relativeVec * std::sin(theta));
 	}
 
