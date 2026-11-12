@@ -271,20 +271,20 @@ public:
 			2 / (right - left),
 			0.0f,
 			0.0f,
-			0.0f,
+			-((right + left) / (right - left)),
 
 			0.0f,
 			2 / (top - bottom),
 			0.0f,
-			0.0f,
+			-((top + bottom) / (top - bottom)),
 
 			0.0f,
 			0.0f,
 			-1.0f / (farDepth - nearDepth),
-			farDepth / (farDepth - nearDepth),
+			-nearDepth / (farDepth - nearDepth),
 
-			-((right + left) / (right - left)),
-			-((top + bottom) / (top - bottom)),
+			0.0f,
+			0.0f,
 			0.0f,
 			1.0f);
 		return result;
