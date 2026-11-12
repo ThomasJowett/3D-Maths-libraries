@@ -224,6 +224,13 @@ public:
 		//calculate angle between them
 		float cosHalfTheta = Dot(a, b);
 
+		//q and -q are the same rotation; use the one nearer a so it turns the shorter way
+		if (cosHalfTheta < 0.0f)
+		{
+			b = Quaternion(-b.r, -b.i, -b.j, -b.k);
+			cosHalfTheta = -cosHalfTheta;
+		}
+
 		//if a==b or a==-b then theta = 0 and we can return a
 		if (std::abs(cosHalfTheta) >= 1.0f)
 		{
