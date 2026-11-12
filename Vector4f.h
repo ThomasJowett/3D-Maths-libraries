@@ -48,7 +48,9 @@ public:
 
 	void Normalize()
 	{
-		(*this) *= (1.0f / Magnitude() > FLT_EPSILON ? Magnitude() : FLT_EPSILON);
+		float magnitude = Magnitude();
+		if (magnitude > FLT_EPSILON)
+			(*this) /= magnitude;
 	}
 
 	Vector3f xyz() const
