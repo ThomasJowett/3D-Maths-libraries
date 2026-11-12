@@ -114,25 +114,17 @@ public:
 	// Plane intersection
 	static bool PlanePlaneIntersection(const Plane& p1, const Plane& p2, Line3D& intersectionLine)
 	{
-		float denominator = p1.a * p2.b - p1.b * p2.a;
+		Vector3f direction = Vector3f::Cross(p1.nd.normal, p2.nd.normal);
+		float lengthSquared = Vector3f::Dot(direction, direction);
+		if (lengthSquared < 1e-12f)
+			return false; //Parallel planes
 
-		if (denominator == 0.0f)
-		{
-			return false;
-		}
+		//Each plane is normal . x = -d
+		Vector3f point = (Vector3f::Cross(p2.nd.normal, direction) * -p1.d + Vector3f::Cross(direction, p1.nd.normal) * -p2.d) / lengthSquared;
 
-		intersectionLine.p = Vector3f((p2.d * p1.b - p1.d * p2.b) / denominator, (p1.d * p2.a - p2.d * p1.a) / denominator, 0.0f);
-
-		intersectionLine.d = Vector3f::Cross(p1.nd.normal, p2.nd.normal);
-
-		if (intersectionLine.d.Magnitude() == 0.0f)
-		{
-			return false;
-		}
-
-		intersectionLine.d.Normalize();
-
-		return false;
+		intersectionLine.p = point;
+		intersectionLine.d = direction.GetNormalized();
+		return true;
 	}
 
 	static bool PlaneLineIntersection(const Plane& p, const Line3D& line, const Vector3f& origin, Vector3f& intersectionPoint)
