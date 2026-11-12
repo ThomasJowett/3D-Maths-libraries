@@ -144,7 +144,7 @@ public:
 			return false; //No intersection, the line is parallel to the plane
 		}
 		float x = (dot - Vector3f::Dot(p.nd.normal, line.p)) / Vector3f::Dot(p.nd.normal, line.d);
-		intersectionPoint = line.p + line.d.GetNormalized() * x;
+		intersectionPoint = line.p + line.d * x;
 		return true;
 	}
 
