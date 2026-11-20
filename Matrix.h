@@ -571,7 +571,7 @@ public:
 		return rot.EulerAngles().z;
 	}
 
-	void Decompose(Vector3f& translation, Vector3f& rotation, Vector3f& scale) const
+	void Decompose(Vector3f& translation, Quaternion& rotation, Vector3f& scale) const
 	{
 		translation = ExtractTranslation();
 
@@ -609,10 +609,16 @@ public:
 		rotMatrix.m[2][1] = basisY.z;
 		rotMatrix.m[2][2] = basisZ.z;
 
-		Quaternion rotQuat = rotMatrix.ExtractRotation();
+		rotation = rotMatrix.ExtractRotation();
+		rotation.Normalize();
+	}
 
+	//rotation as euler angles in radians
+	void Decompose(Vector3f& translation, Vector3f& rotation, Vector3f& scale) const
+	{
+		Quaternion rotQuat;
+		Decompose(translation, rotQuat, scale);
 		rotation = rotQuat.EulerAngles();
-		return;
 	}
 
 	void Transpose()
