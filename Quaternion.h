@@ -182,7 +182,7 @@ public:
 	}
 
 	//rotates a vector by this quaternion
-	Vector3f RotateVectorByQuaternion(Vector3f& vector)
+	Vector3f RotateVectorByQuaternion(Vector3f& vector) const
 	{
 		Vector3f u(i, j, k);
 
@@ -231,28 +231,21 @@ public:
 			cosHalfTheta = -cosHalfTheta;
 		}
 
-		//if a==b or a==-b then theta = 0 and we can return a
-		if (std::abs(cosHalfTheta) >= 1.0f)
+		//very close: interpolate linearly by t, as sin(theta) is too small to divide by
+		if (cosHalfTheta > 0.9995f)
 		{
-			result = a;
+			float ft = (float)t;
+			result.r = a.r + (b.r - a.r) * ft;
+			result.i = a.i + (b.i - a.i) * ft;
+			result.j = a.j + (b.j - a.j) * ft;
+			result.k = a.k + (b.k - a.k) * ft;
+			result.Normalize();
 			return result;
 		}
 
 		//calculate temporary values
 		float halfTheta = acos(cosHalfTheta);
 		float sinHalfTheta = (float)sqrt(1.0f - cosHalfTheta * cosHalfTheta);
-
-		//if theta = 180 degrees then result is not fully defined
-		//we could rotate around any axis normal to a or b
-
-		if (std::abs(sinHalfTheta) < 0.001f)
-		{
-			result.r = (a.r * 0.5f + b.r * 0.5f);
-			result.i = (a.i * 0.5f + b.i * 0.5f);
-			result.j = (a.j * 0.5f + b.j * 0.5f);
-			result.k = (a.k * 0.5f + b.k * 0.5f);
-			return result;
-		}
 
 		float ratioA = (float)sin((1 - t) * halfTheta) / sinHalfTheta;
 		float ratioB = (float)sin(t * halfTheta) / sinHalfTheta;
@@ -320,7 +313,7 @@ public:
 		return *this;
 	}
 
-	Quaternion operator* (const Quaternion& multiplier)
+	Quaternion operator* (const Quaternion& multiplier) const
 	{
 		Quaternion q;
 		q.r = r * multiplier.r - i * multiplier.i - j * multiplier.j - k * multiplier.k;
@@ -343,7 +336,7 @@ public:
 			q.i * multiplier.j - q.j * multiplier.i;
 	}
 
-	Vector3f operator*(const Vector3f& multiplier)
+	Vector3f operator*(const Vector3f& multiplier) const
 	{
 		Vector3f V = multiplier;
 		return RotateVectorByQuaternion(V);
