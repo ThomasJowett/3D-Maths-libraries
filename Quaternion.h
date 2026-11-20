@@ -36,6 +36,16 @@ public:
 	//from a vector of 3 euler angles in radians
 	Quaternion(const Vector3f angles)
 	{
+		//only Z: the same result as the general case below, with fewer terms
+		if (angles.x == 0.0f && angles.y == 0.0f)
+		{
+			r = cosf(0.5f * angles.z);
+			i = 0.0f;
+			j = 0.0f;
+			k = sinf(0.5f * angles.z);
+			return;
+		}
+
 		float cos_x_2 = cosf(0.5f * angles.x);
 		float cos_y_2 = cosf(0.5f * angles.y);
 		float cos_z_2 = cosf(0.5f * angles.z);
@@ -149,6 +159,25 @@ public:
 		euler.z = std::atan2(2 * (r * k + i * j), 1 - 2 * (j * j + k * k));
 
 		return euler;
+	}
+
+	//returns the euler angles of the quaternion nearest to reference, adding whole turns where needed and keeping reference's X where that's exact, as at gimbal lock
+	Vector3f EulerAnglesNear(const Vector3f& reference) const
+	{
+		Quaternion q = GetNormalized();
+
+		//X and X + pi each give every rotation; Y and Z solved for each stay exact near gimbal lock, where X is unreliable
+		float x = std::atan2(2.0f * (q.r * q.i + q.j * q.k), 1.0f - 2.0f * (q.i * q.i + q.j * q.j));
+		Vector3f first = NearestWholeTurns(q.EulerAnglesWithX(x), reference);
+		Vector3f second = NearestWholeTurns(q.EulerAnglesWithX(x + (float)PI), reference);
+		Vector3f nearest = EulerDistance(first, reference) <= EulerDistance(second, reference) ? first : second;
+
+		//rotations closer than this, in radians, count as the same
+		const float sameRotation = 4e-6f;
+		Vector3f keptX = NearestWholeTurns(q.EulerAnglesWithX(reference.x), reference);
+		if (EulerDistance(keptX, reference) <= EulerDistance(nearest, reference) && AngleBetween(Quaternion(keptX), q) < sameRotation)
+			return keptX;
+		return nearest;
 	}
 
 	//returns this quaternion as an axis and an angle in radians
@@ -283,6 +312,14 @@ public:
 		return result;
 	}
 
+	//angle in radians between two unit quaternions' rotations, from the vector part of the difference so small angles stay accurate
+	float static AngleBetween(const Quaternion& a, const Quaternion& b)
+	{
+		Quaternion difference = a.Conjugate() * b;
+		float sinHalf = sqrtf(difference.i * difference.i + difference.j * difference.j + difference.k * difference.k);
+		return 2.0f * std::atan2(sinHalf, std::abs(difference.r));
+	}
+
 	//Operators---------------------------------------------------------------------------------
 	Quaternion operator = (const Quaternion& q)
 	{
@@ -351,6 +388,35 @@ public:
 	void serialize(Archive& archive)
 	{
 		archive(r, i, j, k);
+	}
+
+private:
+	//euler angles of this unit quaternion with X given: this * qx^-1 is qz * qy, whose matrix gives Y from the bottom row and Z from the second column
+	Vector3f EulerAnglesWithX(float x) const
+	{
+		Quaternion zy = *this * Quaternion(cosf(0.5f * x), -sinf(0.5f * x), 0.0f, 0.0f);
+		float m20 = 2.0f * (zy.i * zy.k - zy.r * zy.j);
+		float m22 = 1.0f - 2.0f * (zy.i * zy.i + zy.j * zy.j);
+		float m01 = 2.0f * (zy.i * zy.j - zy.k * zy.r);
+		float m11 = 1.0f - 2.0f * (zy.i * zy.i + zy.k * zy.k);
+		return Vector3f(x, std::atan2(-m20, m22), std::atan2(-m01, m11));
+	}
+
+	//angle plus the whole turns that bring it nearest to target
+	float static NearestWholeTurn(float angle, float target)
+	{
+		const float twoPi = 2.0f * (float)PI;
+		return angle + twoPi * std::round((target - angle) / twoPi);
+	}
+
+	Vector3f static NearestWholeTurns(const Vector3f& angles, const Vector3f& target)
+	{
+		return Vector3f(NearestWholeTurn(angles.x, target.x), NearestWholeTurn(angles.y, target.y), NearestWholeTurn(angles.z, target.z));
+	}
+
+	float static EulerDistance(const Vector3f& a, const Vector3f& b)
+	{
+		return std::abs(a.x - b.x) + std::abs(a.y - b.y) + std::abs(a.z - b.z);
 	}
 };
 
