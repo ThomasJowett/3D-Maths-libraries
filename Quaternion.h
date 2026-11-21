@@ -379,6 +379,17 @@ public:
 		return RotateVectorByQuaternion(V);
 	}
 
+	//exact comparison of the four components; q and -q, the same rotation, compare unequal
+	bool operator==(const Quaternion& q) const
+	{
+		return r == q.r && i == q.i && j == q.j && k == q.k;
+	}
+
+	bool operator!=(const Quaternion& q) const
+	{
+		return !(*this == q);
+	}
+
 	float& operator[](const int i)
 	{
 		return i == 0 ? this->r : (i == 1 ? this->i : (i == 2 ? this->j : this->k));
