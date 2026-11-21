@@ -166,18 +166,18 @@ public:
 	{
 		Quaternion q = GetNormalized();
 
+		//reference's X whenever it gives the rotation: X didn't change, or at gimbal lock, where any split between X and Z
+		//gives it, so comparing distances would leave the choice to rounding
+		const float sameRotation = 4e-6f;	//rotations closer than this, in radians, count as the same
+		Vector3f keptX = NearestWholeTurns(q.EulerAnglesWithX(reference.x), reference);
+		if (AngleBetween(Quaternion(keptX), q) < sameRotation)
+			return keptX;
+
 		//X and X + pi each give every rotation; Y and Z solved for each stay exact near gimbal lock, where X is unreliable
 		float x = std::atan2(2.0f * (q.r * q.i + q.j * q.k), 1.0f - 2.0f * (q.i * q.i + q.j * q.j));
 		Vector3f first = NearestWholeTurns(q.EulerAnglesWithX(x), reference);
 		Vector3f second = NearestWholeTurns(q.EulerAnglesWithX(x + (float)PI), reference);
-		Vector3f nearest = EulerDistance(first, reference) <= EulerDistance(second, reference) ? first : second;
-
-		//rotations closer than this, in radians, count as the same
-		const float sameRotation = 4e-6f;
-		Vector3f keptX = NearestWholeTurns(q.EulerAnglesWithX(reference.x), reference);
-		if (EulerDistance(keptX, reference) <= EulerDistance(nearest, reference) && AngleBetween(Quaternion(keptX), q) < sameRotation)
-			return keptX;
-		return nearest;
+		return EulerDistance(first, reference) <= EulerDistance(second, reference) ? first : second;
 	}
 
 	//returns this quaternion as an axis and an angle in radians
