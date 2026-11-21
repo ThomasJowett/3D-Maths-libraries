@@ -571,46 +571,43 @@ public:
 		return rot.EulerAngles().z;
 	}
 
-	void Decompose(Vector3f& translation, Quaternion& rotation, Vector3f& scale) const
+	//each scale part keeps the sign of signs' part, so a mirrored matrix stays mirrored on the same axis; a handedness
+	//the signs don't explain goes into X. False, with rotation left as it was, when a scale of zero leaves no rotation
+	bool Decompose(Vector3f& translation, Quaternion& rotation, Vector3f& scale, const Vector3f& signs = Vector3f(1.0f, 1.0f, 1.0f)) const
 	{
 		translation = ExtractTranslation();
 
-		Vector3f basisX(m[0][0], m[1][0], m[2][0]);
-		Vector3f basisY(m[0][1], m[1][1], m[2][1]);
-		Vector3f basisZ(m[0][2], m[1][2], m[2][2]);
-
-		// Extract Scale
-		scale.x = basisX.Magnitude();
-		scale.y = basisY.Magnitude();
-		scale.z = basisZ.Magnitude();
-
-		if (scale.x != 0.0f)
-			basisX /= scale.x;
-		if (scale.y != 0.0f)
-			basisY /= scale.y;
-		if (scale.z != 0.0f)
-			basisZ /= scale.z;
-
-		// A mirrored basis goes into a negative X scale, leaving a rotation
-		if (Vector3f::Dot(Vector3f::Cross(basisX, basisY), basisZ) < 0.0f)
+		const float sign[3] = { signs.x < 0.0f ? -1.0f : 1.0f, signs.y < 0.0f ? -1.0f : 1.0f, signs.z < 0.0f ? -1.0f : 1.0f };
+		Vector3f basis[3];
+		float parts[3];
+		for (int column = 0; column < 3; column++)
 		{
-			scale.x = -scale.x;
-			basisX = -basisX;
+			basis[column] = Vector3f(m[0][column], m[1][column], m[2][column]);
+			parts[column] = basis[column].Magnitude() * sign[column];
+		}
+		scale = Vector3f(parts[0], parts[1], parts[2]);
+		if (parts[0] == 0.0f || parts[1] == 0.0f || parts[2] == 0.0f)
+			return false;
+		for (int column = 0; column < 3; column++)
+			basis[column] /= parts[column];
+
+		if (Vector3f::Dot(Vector3f::Cross(basis[0], basis[1]), basis[2]) < 0.0f)
+		{
+			parts[0] = -parts[0];
+			basis[0] = -basis[0];
+			scale.x = parts[0];
 		}
 
 		Matrix4x4 rotMatrix;
-		rotMatrix.m[0][0] = basisX.x;
-		rotMatrix.m[0][1] = basisY.x;
-		rotMatrix.m[0][2] = basisZ.x;
-		rotMatrix.m[1][0] = basisX.y;
-		rotMatrix.m[1][1] = basisY.y;
-		rotMatrix.m[1][2] = basisZ.y;
-		rotMatrix.m[2][0] = basisX.z;
-		rotMatrix.m[2][1] = basisY.z;
-		rotMatrix.m[2][2] = basisZ.z;
-
+		for (int column = 0; column < 3; column++)
+		{
+			rotMatrix.m[0][column] = basis[column].x;
+			rotMatrix.m[1][column] = basis[column].y;
+			rotMatrix.m[2][column] = basis[column].z;
+		}
 		rotation = rotMatrix.ExtractRotation();
 		rotation.Normalize();
+		return true;
 	}
 
 	//rotation as euler angles in radians
