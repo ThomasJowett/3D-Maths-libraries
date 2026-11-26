@@ -51,7 +51,7 @@ public:
 	}
 
 	// construct from a point and a normal
-	Plane(const Vector3f& point, Vector3f& normal)
+	Plane(const Vector3f& point, const Vector3f& normal)
 	{
 		Vector3f normalizedNormal = normal.GetNormalized();
 		a = normalizedNormal.x;
