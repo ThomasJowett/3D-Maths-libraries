@@ -4,6 +4,7 @@
 #include "Vector3f.h"
 
 #include <float.h>
+#include <ostream>
 
 class Vector4f
 {

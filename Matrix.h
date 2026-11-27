@@ -1,6 +1,7 @@
 #ifndef _MATRIX_H
 #define _MATRIX_H
 
+#include <ostream>
 #include <string>
 
 #include "Vector4f.h"

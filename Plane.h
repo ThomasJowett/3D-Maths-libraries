@@ -1,6 +1,8 @@
 #ifndef _PLANE_H
 #define _PLANE_H
 
+#include <ostream>
+
 #include "Line3D.h"
 
 class Plane

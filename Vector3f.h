@@ -1,6 +1,7 @@
 #ifndef _VECTOR3F_H
 #define _VECTOR3F_H
 
+#include <ostream>
 #include <string>
 #include <cmath>
 

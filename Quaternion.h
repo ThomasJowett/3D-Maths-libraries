@@ -2,6 +2,7 @@
 #define _QUATERNION_H
 
 #include <float.h>
+#include <ostream>
 #include "Vector3f.h"
 #include <string>
 
